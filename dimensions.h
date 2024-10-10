@@ -1,0 +1,12 @@
+#ifndef DIMENSIONS_H
+#define DIMENSIONS_H
+
+#define ORIGINAL_TILE_SIZE 16
+#define SCALE 3
+#define TILE_SIZE (ORIGINAL_TILE_SIZE * SCALE)
+#define TILESET_COLS 15
+
+int SCREEN_WIDTH = 1280;
+int SCREEN_HEIGHT = 720;
+
+#endif
