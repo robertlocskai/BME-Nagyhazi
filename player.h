@@ -21,6 +21,7 @@ typedef struct {
     SDL_Rect rect;
     bool editMode;
     int currentEditCursorSize;
+    int currentQuickInventorySelection;
     Inventory inv;
 } Player;
 

@@ -13,6 +13,7 @@ void initPlayer(Player *player) {
     player->rect.h = TILE_SIZE;
     player->editMode = false;
     player->currentEditCursorSize = 1;
+    player->currentQuickInventorySelection = 0;
     initInventory(&player->inv);
 }
 

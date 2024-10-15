@@ -141,7 +141,43 @@ int main(int argc, char* argv[]) {
                 }
             }
 
+            if (e.type == SDL_MOUSEWHEEL) {
+                if (e.wheel.y > 0) {
+                    player.currentQuickInventorySelection = player.currentQuickInventorySelection > 0 ? player.currentQuickInventorySelection-1 : 7;
+                } else if (e.wheel.y < 0) {
+                    player.currentQuickInventorySelection = player.currentQuickInventorySelection < 7 ? player.currentQuickInventorySelection+1 : 0;
+                }
+            }
+
             if(e.type == SDL_KEYDOWN) {
+                switch(e.key.keysym.sym) {
+                    case SDLK_1:
+                        player.currentQuickInventorySelection = 0;
+                    break;
+                    case SDLK_2:
+                        player.currentQuickInventorySelection = 1;
+                    break;
+                    case SDLK_3:
+                        player.currentQuickInventorySelection = 2;
+                    break;
+                    case SDLK_4:
+                        player.currentQuickInventorySelection = 3;
+                    break;
+                    case SDLK_5:
+                        player.currentQuickInventorySelection = 4;
+                    break;
+                    case SDLK_6:
+                        player.currentQuickInventorySelection = 5;
+                    break;
+                    case SDLK_7:
+                        player.currentQuickInventorySelection = 6;
+                    break;
+                    case SDLK_8:
+                        player.currentQuickInventorySelection = 7;
+                    break;
+                    default:
+                        //itt nem kéne semmit elvileg
+                }
                 if(e.key.keysym.sym == SDLK_e && !player.editMode && !ePressed && !guiM.guis[Index_INVENTORY].visible) {
                     printf("Edit mode on.\n");
                     ePressed = true;

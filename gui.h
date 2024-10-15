@@ -5,13 +5,15 @@
 
 typedef enum {
     INVENTORY,
-    QUICK_INVENTORY
+    QUICK_INVENTORY,
+    QUICK_INVENTORY_CURSOR
 } GUI_Type;
 
 typedef enum {
     Index_INVENTORY = 0,
     Index_QUICK_INVENTORY = 1,
-    Index_SIZE = 2
+    Index_QUICK_INVENTORY_CURSOR = 2,
+    Index_SIZE = 3
 } GUI_Index;
 
 typedef struct {
