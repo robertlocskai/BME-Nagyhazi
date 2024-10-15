@@ -53,7 +53,7 @@ void updateGUI(GUIManager *guiManager, int mouseX, int mouseY) {
         //if(guiManager->guis[INVENTORY].visible) {
         //}
 }
-void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet, Player *player) {
+void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet, Player *player, int mouseX, int mouseY) {
     for(int i = 0; i < sizeof(guiManager->guis)/sizeof(guiManager->guis[0]); i++) {
         if(guiManager->guis[i].visible) {
             SDL_Rect src, dest;
@@ -73,8 +73,16 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
             if(guiManager->guis[i].type == INVENTORY) {
                 for(int i = 0; i < 4; i++) {
                     for(int j = 0; j < 8; j++) {
-                        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
-                        SDL_RenderFillRect(renderer, &player->inv.inventorySlots[i][j].slot);
+                        if(mouseX>=player->inv.inventorySlots[i][j].slot.x &&
+                           mouseX<=player->inv.inventorySlots[i][j].slot.x + player->inv.inventorySlots[i][j].slot.w &&
+                           mouseY>=player->inv.inventorySlots[i][j].slot.y &&
+                           mouseY<=player->inv.inventorySlots[i][j].slot.y + player->inv.inventorySlots[i][j].slot.h) {
+
+
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 50);
+                            SDL_RenderFillRect(renderer, &player->inv.inventorySlots[i][j].slot);
+
+                           }
                     }
                 }
             }

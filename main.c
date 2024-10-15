@@ -262,7 +262,7 @@ int main(int argc, char* argv[]) {
 
 
         //TOP LAYER GUI
-        drawGUI(renderer, &guiM, gui, &player);
+        drawGUI(renderer, &guiM, gui, &player, mouseX, mouseY);
 
         SDL_RenderPresent(renderer);
 

@@ -21,7 +21,7 @@ void initInventory(Inventory *inv) {
         for(int j = 0; j < 8; j++) {
             int y = i*(ORIGINAL_TILE_SIZE*4) + 16;
             int x = j*(ORIGINAL_TILE_SIZE*4) + 16;
-            inv->inventorySlots[i][j].slot = (SDL_Rect){x, y, ORIGINAL_TILE_SIZE*4, ORIGINAL_TILE_SIZE*4};
+            inv->inventorySlots[i][j].slot = (SDL_Rect){x + SCALE, y + SCALE, ORIGINAL_TILE_SIZE*4 - SCALE*2, ORIGINAL_TILE_SIZE*4 - SCALE*2};
             inv->inventorySlots[i][j].item = 0;
         }
     }
