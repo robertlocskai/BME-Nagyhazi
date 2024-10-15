@@ -18,14 +18,39 @@ void initPlayer(Player *player) {
 }
 
 void initInventory(Inventory *inv) {
+    /*ItemType type;
+    char[MAX_ITEM_NAME_LENGTH] name;
+    int srcX;
+    int srcY;
+    int srcW;
+    int srcH;
+    int qty;
+    int invX;
+    int invY;*/
+
     for(int i = 0; i < 4; i++) {
         for(int j = 0; j < 8; j++) {
             int y = i*(ORIGINAL_TILE_SIZE*4) + 16;
             int x = j*(ORIGINAL_TILE_SIZE*4) + 16;
             inv->inventorySlots[i][j].slot = (SDL_Rect){x + SCALE, y + SCALE, ORIGINAL_TILE_SIZE*4 - SCALE*2, ORIGINAL_TILE_SIZE*4 - SCALE*2};
-            inv->inventorySlots[i][j].item = 0;
+            inv->inventorySlots[i][j].item = NULL;
         }
     }
+
+    //DEFAULT ITEMEK ADDOLÁSA
+    inv->inventorySlots[3][0].item = (Item *)malloc(sizeof(Item));
+    if (inv->inventorySlots[3][0].item != NULL) {
+        inv->inventorySlots[3][0].item->type = TOOL;
+        strcpy(inv->inventorySlots[3][0].item->name, "Hoe");
+        inv->inventorySlots[3][0].item->srcX = 0;
+        inv->inventorySlots[3][0].item->srcY = 0;
+        inv->inventorySlots[3][0].item->srcW = ORIGINAL_TILE_SIZE;
+        inv->inventorySlots[3][0].item->srcH = ORIGINAL_TILE_SIZE;
+        inv->inventorySlots[3][0].item->qty = 1;
+        inv->inventorySlots[3][0].item->invX = 3;
+        inv->inventorySlots[3][0].item->invY = 0;
+    }
+
 }
 
 void updatePlayer(Player *player) {
@@ -43,4 +68,15 @@ void renderPlayer(SDL_Renderer *renderer, Player *player, SDL_Rect *camera) {
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &renderRect);
 
+}
+
+void freeInventory(Player *player) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (player->inv.inventorySlots[i][j].item != NULL) {
+                free(player->inv.inventorySlots[i][j].item);
+                player->inv.inventorySlots[i][j].item = NULL;
+            }
+        }
+    }
 }

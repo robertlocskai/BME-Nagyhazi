@@ -39,5 +39,5 @@ typedef struct {
 void initGUI(Gui *gui, GUI_Type type);
 void updateGUIPositions(GUIManager *guiManager);
 void updateGUI(GUIManager *guiManager, int mouseX, int mouseY);
-void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet, Player *player, int mouseX, int mouseY);
+void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet, SDL_Texture *itemSpriteSheet, Player *player, int mouseX, int mouseY);
 #endif

@@ -104,6 +104,7 @@ int main(int argc, char* argv[]) {
         SDL_Texture* tileset = loadTexture("assets/images/tiles.png", renderer);
         SDL_Texture* uiGrids = loadTexture("assets/images/gui/ingame_grid.png", renderer);
         SDL_Texture* gui = loadTexture("assets/images/gui/gui.png", renderer);
+        SDL_Texture* items = loadTexture("assets/images/gui/items.png", renderer);
 
         if (tileset == NULL) {
             return -1;
@@ -129,6 +130,7 @@ int main(int argc, char* argv[]) {
 
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
+                freeInventory(&player);
                 quit = 1;
             }
             else if (e.type == SDL_WINDOWEVENT) {
@@ -298,7 +300,7 @@ int main(int argc, char* argv[]) {
 
 
         //TOP LAYER GUI
-        drawGUI(renderer, &guiM, gui, &player, mouseX, mouseY);
+        drawGUI(renderer, &guiM, gui, items, &player, mouseX, mouseY);
 
         SDL_RenderPresent(renderer);
 
