@@ -80,9 +80,7 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
             dest.x = guiManager->guis[i].x;
             dest.y = guiManager->guis[i].y;
 
-            if(guiManager->guis[i].type == QUICK_INVENTORY_CURSOR) {
-                    dest.x = dest.x + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE);
-            }
+
 
             SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
 
@@ -105,12 +103,28 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                             itemSrc.h = player->inv.inventorySlots[i][j].item->srcH;
 
                             SDL_RenderCopy(renderer, itemSpriteSheet, &itemSrc, &player->inv.inventorySlots[i][j].slot);
+
                         }
                     }
                 }
             }
+            else if(guiManager->guis[i].type == QUICK_INVENTORY) {
+                for(int i = 0; i < 8; i++) {
+                    if(player->inv.inventorySlots[3][i].item != NULL) {
+                        SDL_Rect itemSrc;
+                        itemSrc.x = player->inv.inventorySlots[3][i].item->srcX;
+                        itemSrc.y = player->inv.inventorySlots[3][i].item->srcY;
+                        itemSrc.w = player->inv.inventorySlots[3][i].item->srcW;
+                        itemSrc.h = player->inv.inventorySlots[3][i].item->srcH;
 
+                        SDL_RenderCopy(renderer, itemSpriteSheet, &itemSrc, &player->inv.quickInventorySlots[i].slot);
+                    }
+                }
+            }
+
+            if(guiManager->guis[i].type == QUICK_INVENTORY_CURSOR) {
+                    dest.x = dest.x + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE);
+            }
         }
     }
-
 }

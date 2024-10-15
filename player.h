@@ -32,6 +32,7 @@ typedef struct {
 
 typedef struct {
     InventorySlot inventorySlots[4][8];
+    InventorySlot quickInventorySlots[8];
 
 } Inventory;
 

@@ -37,6 +37,17 @@ void initInventory(Inventory *inv) {
         }
     }
 
+
+    for(int i = 0; i < 8; i++) {
+        SDL_Rect rect;
+        rect.w = ORIGINAL_TILE_SIZE * 4;
+        rect.h = ORIGINAL_TILE_SIZE * 4;
+        rect.y = (SCREEN_HEIGHT-(ORIGINAL_TILE_SIZE*4) - ORIGINAL_TILE_SIZE);
+        rect.x = (SCREEN_WIDTH/2 - rect.w/2) - (rect.w/2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
+        inv->quickInventorySlots[i].slot = rect;
+        inv->quickInventorySlots[i].item = NULL;
+    }
+
     //DEFAULT ITEMEK ADDOLÁSA
     inv->inventorySlots[3][0].item = (Item *)malloc(sizeof(Item));
     if (inv->inventorySlots[3][0].item != NULL) {
@@ -50,6 +61,21 @@ void initInventory(Inventory *inv) {
         inv->inventorySlots[3][0].item->invX = 3;
         inv->inventorySlots[3][0].item->invY = 0;
     }
+
+    inv->inventorySlots[3][4].item = (Item *)malloc(sizeof(Item));
+    if (inv->inventorySlots[3][4].item != NULL) {
+        inv->inventorySlots[3][4].item->type = TOOL;
+        strcpy(inv->inventorySlots[3][4].item->name, "Hoe");
+        inv->inventorySlots[3][4].item->srcX = 0;
+        inv->inventorySlots[3][4].item->srcY = 0;
+        inv->inventorySlots[3][4].item->srcW = ORIGINAL_TILE_SIZE;
+        inv->inventorySlots[3][4].item->srcH = ORIGINAL_TILE_SIZE;
+        inv->inventorySlots[3][4].item->qty = 1;
+        inv->inventorySlots[3][4].item->invX = 3;
+        inv->inventorySlots[3][4].item->invY = 0;
+    }
+
+
 
 }
 
