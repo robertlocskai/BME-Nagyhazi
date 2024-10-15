@@ -242,6 +242,7 @@ int main(int argc, char* argv[]) {
         //UPDATES
         updatePlayer(&player);
         updateCamera(&camera, &player);
+        updateGUI(&guiM, mouseX, mouseY);
 
 
         //RENDER
@@ -261,7 +262,7 @@ int main(int argc, char* argv[]) {
 
 
         //TOP LAYER GUI
-        drawGUI(renderer, &guiM, gui);
+        drawGUI(renderer, &guiM, gui, &player);
 
         SDL_RenderPresent(renderer);
 

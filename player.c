@@ -13,6 +13,18 @@ void initPlayer(Player *player) {
     player->rect.h = TILE_SIZE;
     player->editMode = false;
     player->currentEditCursorSize = 1;
+    initInventory(&player->inv);
+}
+
+void initInventory(Inventory *inv) {
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 8; j++) {
+            int y = i*(ORIGINAL_TILE_SIZE*4) + 16;
+            int x = j*(ORIGINAL_TILE_SIZE*4) + 16;
+            inv->inventorySlots[i][j].slot = (SDL_Rect){x, y, ORIGINAL_TILE_SIZE*4, ORIGINAL_TILE_SIZE*4};
+            inv->inventorySlots[i][j].item = 0;
+        }
+    }
 }
 
 void updatePlayer(Player *player) {

@@ -1,8 +1,5 @@
 #include "gui.h"
-#include <SDL.h>
 #include "dimensions.h"
-#include <stdbool.h>
-
 
 void initGUI(Gui *gui, GUI_Type givenType) {
     switch(givenType) {
@@ -52,10 +49,11 @@ void initGUIManager(GUIManager *guiManager) {
     guiManager->guis[Index_QUICK_INVENTORY]=quickInventory;
 
 }
-void updateGUI(Gui *gui) {
-
+void updateGUI(GUIManager *guiManager, int mouseX, int mouseY) {
+        //if(guiManager->guis[INVENTORY].visible) {
+        //}
 }
-void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet) {
+void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet, Player *player) {
     for(int i = 0; i < sizeof(guiManager->guis)/sizeof(guiManager->guis[0]); i++) {
         if(guiManager->guis[i].visible) {
             SDL_Rect src, dest;
@@ -71,6 +69,16 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
             dest.y = guiManager->guis[i].y;
 
             SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
+
+            if(guiManager->guis[i].type == INVENTORY) {
+                for(int i = 0; i < 4; i++) {
+                    for(int j = 0; j < 8; j++) {
+                        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+                        SDL_RenderFillRect(renderer, &player->inv.inventorySlots[i][j].slot);
+                    }
+                }
+            }
+
         }
     }
 
