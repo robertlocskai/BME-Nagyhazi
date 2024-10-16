@@ -140,6 +140,7 @@ int main(int argc, char* argv[]) {
                     camera.h = SCREEN_HEIGHT;
                     camera.w = SCREEN_WIDTH;
                     updateGUIPositions(&guiM);
+                    setDimensionsOfHotbar(&player.inv);
                 }
             }
 

@@ -49,6 +49,7 @@ typedef struct {
 } Player;
 
 void initInventory(Inventory *inv);
+void setDimensionsOfHotbar(Inventory *inv);
 void initPlayer(Player *player);
 void updatePlayer(Player *player);
 void renderPlayer(SDL_Renderer *renderer, Player *Player, SDL_Rect *camera);

@@ -81,10 +81,8 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
             dest.y = guiManager->guis[i].y;
 
 
-
-            SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
-
             if(guiManager->guis[i].type == INVENTORY) {
+                SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
                 for(int i = 0; i < 4; i++) {
                     for(int j = 0; j < 8; j++) {
                         if(mouseX>=player->inv.inventorySlots[i][j].slot.x &&
@@ -109,6 +107,7 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                 }
             }
             else if(guiManager->guis[i].type == QUICK_INVENTORY) {
+            SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
                 for(int i = 0; i < 8; i++) {
                     if(player->inv.inventorySlots[3][i].item != NULL) {
                         SDL_Rect itemSrc;
@@ -121,10 +120,13 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                     }
                 }
             }
-
-            if(guiManager->guis[i].type == QUICK_INVENTORY_CURSOR) {
-                    dest.x = dest.x + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE);
+            else if(guiManager->guis[i].type == QUICK_INVENTORY_CURSOR) {
+                printf("x: %f\n", (dest.x*1.00) + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE));
+                dest.x = (dest.x*1.00) + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE);
+                SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
             }
+
+
         }
     }
 }
