@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1729072673 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
+1729073469 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
 	<SDL.h>
 	<stdio.h>
 	<stdbool.h>
@@ -405,24 +405,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1728317605 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
+1729089154 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
 	"map.h"
 	<stdlib.h>
 	<SDL.h>
 	"dimensions.h"
 	<SDL_image.h>
 
-1728316766 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.h
+1729089161 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.h
 
 1728211388 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\dimensions.h
 
-1729066406 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.c
+1729073469 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.c
 	<SDL.h>
 	"dimensions.h"
 	"player.h"
 	<stdbool.h>
 
-1729066416 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.h
+1729073469 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.h
 	<SDL.h>
 	<stdbool.h>
 
@@ -447,7 +447,7 @@
 1728316097 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\ingameui.h
 	"Player.h"
 
-1729073388 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\gui.c
+1729073469 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\gui.c
 	"gui.h"
 	"dimensions.h"
 

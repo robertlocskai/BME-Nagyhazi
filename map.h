@@ -25,12 +25,19 @@ typedef enum {
 } TileType;
 
 typedef struct {
-    TileType tiles[MAP_ROWS][MAP_COLS];
+
+    TileType type;
+    int state;
+
+} Tile;
+
+typedef struct {
+    Tile tiles[MAP_ROWS][MAP_COLS];
 } Map;
 SDL_Rect TILE;
 
 bool isWithinBounds(int row, int col);
-bool isGrass(TileType tile);
+bool isGrass(Tile tile);
 void updateTile(Map *map, int row, int col);
 void harrowTiles(Map *map, int tileX, int tileY, int currentEditCursorSize);
 void removeHarrowed(Map *map, int tileX, int tileY, int currentEditCursorSize);
