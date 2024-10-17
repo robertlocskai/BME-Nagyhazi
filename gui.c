@@ -66,6 +66,7 @@ void updateGUI(GUIManager *guiManager, int mouseX, int mouseY) {
         //}
 }
 void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *spriteSheet, SDL_Texture *itemSpriteSheet, Player *player, int mouseX, int mouseY) {
+    static bool mouseWasPressed = false;
     for(int i = 0; i < sizeof(guiManager->guis)/sizeof(guiManager->guis[0]); i++) {
         if(guiManager->guis[i].visible) {
             SDL_Rect src, dest;
@@ -91,6 +92,41 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                            mouseY<=player->inv.inventorySlots[i][j].slot.y + player->inv.inventorySlots[i][j].slot.h) {
                             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 50);
                             SDL_RenderFillRect(renderer, &player->inv.inventorySlots[i][j].slot);
+
+                            int mouseButtons = SDL_GetMouseState(NULL, NULL);
+                            bool leftMousePressed = mouseButtons & SDL_BUTTON(SDL_BUTTON_LEFT);
+
+                            if (!leftMousePressed && mouseWasPressed) {
+                                if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem == NULL) {
+                                    player->cursorHeldItem = player->inv.inventorySlots[i][j].item;
+                                    player->inv.inventorySlots[i][j].item = NULL;
+                                }
+                                else if(player->inv.inventorySlots[i][j].item == NULL && player->cursorHeldItem != NULL) {
+                                    player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
+                                    player->cursorHeldItem = NULL;
+                                }
+                                else if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem != NULL) {
+                                    Item* helper = player->inv.inventorySlots[i][j].item;
+                                    player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
+                                    player->cursorHeldItem = helper;
+                                }
+                            }
+                                /*if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem == NULL) {
+                                    player->cursorHeldItem = player->inv.inventorySlots[i][j].item;
+                                    player->inv.inventorySlots[i][j].item = NULL;
+                                }
+                                else if(player->inv.inventorySlots[i][j].item == NULL && player->cursorHeldItem != NULL) {
+                                    player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
+                                    player->cursorHeldItem = NULL;
+                                }
+                                else if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem != NULL) {
+                                    Item* helper = player->inv.inventorySlots[i][j].item;
+                                    player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
+                                    player->cursorHeldItem = helper;
+                                }
+                            */
+                            mouseWasPressed = leftMousePressed;
+
                         }
 
                         if(player->inv.inventorySlots[i][j].item != NULL) {

@@ -53,6 +53,7 @@ typedef struct {
     int currentEditCursorSize;
     int currentQuickInventorySelection;
     Inventory inv;
+    Item* cursorHeldItem;
 } Player;
 
 Item* initItem(ItemName name);

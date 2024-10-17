@@ -14,18 +14,13 @@ void initPlayer(Player *player) {
     player->editMode = false;
     player->currentEditCursorSize = 1;
     player->currentQuickInventorySelection = 0;
+    player->cursorHeldItem = NULL;
     initInventory(&player->inv);
 }
 
 void setDimensionsOfHotbar(Inventory *inv) {
 
     for(int i = 0; i < 8; i++) {
-        /*SDL_Rect rect;
-        rect.w = ORIGINAL_TILE_SIZE * 4;
-        rect.h = ORIGINAL_TILE_SIZE * 4;
-        rect.y = (SCREEN_HEIGHT-(ORIGINAL_TILE_SIZE*4) - ORIGINAL_TILE_SIZE);
-        rect.x = (SCREEN_WIDTH/2 - rect.w/2) - (rect.w/2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);*/
-        //inv->quickInventorySlots[i].slot = rect;
         inv->quickInventorySlots[i].slot.x = (SCREEN_WIDTH/2 - inv->quickInventorySlots[i].slot.w/2) - (inv->quickInventorySlots[i].slot.w/2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
         inv->quickInventorySlots[i].slot.y = (SCREEN_HEIGHT-(ORIGINAL_TILE_SIZE*4) - ORIGINAL_TILE_SIZE);
     }
