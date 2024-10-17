@@ -11,9 +11,14 @@ typedef enum {
     SEED
 } ItemType;
 
+typedef enum {
+    HOE
+} ItemName;
+
 typedef struct {
     ItemType type;
-    char name[MAX_ITEM_NAME_LENGTH];
+    ItemName name;
+    char displayName[MAX_ITEM_NAME_LENGTH];
     int srcX;
     int srcY;
     int srcW;

@@ -67,7 +67,8 @@ void initInventory(Inventory *inv) {
     inv->inventorySlots[3][0].item = (Item *)malloc(sizeof(Item));
     if (inv->inventorySlots[3][0].item != NULL) {
         inv->inventorySlots[3][0].item->type = TOOL;
-        strcpy(inv->inventorySlots[3][0].item->name, "Hoe");
+        inv->inventorySlots[3][0].item->name = HOE;
+        strcpy(inv->inventorySlots[3][0].item->displayName, "Hoe");
         inv->inventorySlots[3][0].item->srcX = 0;
         inv->inventorySlots[3][0].item->srcY = 0;
         inv->inventorySlots[3][0].item->srcW = ORIGINAL_TILE_SIZE;
@@ -80,7 +81,8 @@ void initInventory(Inventory *inv) {
     inv->inventorySlots[3][4].item = (Item *)malloc(sizeof(Item));
     if (inv->inventorySlots[3][4].item != NULL) {
         inv->inventorySlots[3][4].item->type = TOOL;
-        strcpy(inv->inventorySlots[3][4].item->name, "Hoe");
+        inv->inventorySlots[3][4].item->name = HOE;
+        strcpy(inv->inventorySlots[3][4].item->displayName, "Hoe");
         inv->inventorySlots[3][4].item->srcX = 0;
         inv->inventorySlots[3][4].item->srcY = 0;
         inv->inventorySlots[3][4].item->srcW = ORIGINAL_TILE_SIZE;

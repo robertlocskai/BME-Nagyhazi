@@ -147,35 +147,45 @@ int main(int argc, char* argv[]) {
             if (e.type == SDL_MOUSEWHEEL) {
                 if (e.wheel.y > 0) {
                     player.currentQuickInventorySelection = player.currentQuickInventorySelection > 0 ? player.currentQuickInventorySelection-1 : 7;
+                    player.currentEditCursorSize = 1;
                 } else if (e.wheel.y < 0) {
                     player.currentQuickInventorySelection = player.currentQuickInventorySelection < 7 ? player.currentQuickInventorySelection+1 : 0;
+                    player.currentEditCursorSize = 1;
                 }
             }
 
             if(e.type == SDL_KEYDOWN) {
                 switch(e.key.keysym.sym) {
                     case SDLK_1:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 0;
                     break;
                     case SDLK_2:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 1;
                     break;
                     case SDLK_3:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 2;
                     break;
                     case SDLK_4:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 3;
                     break;
                     case SDLK_5:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 4;
                     break;
                     case SDLK_6:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 5;
                     break;
                     case SDLK_7:
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 6;
                     break;
                     case SDLK_8:
+                        player.currentEditCursorSize = 1;wwas
                         player.currentQuickInventorySelection = 7;
                     break;
                     default:
@@ -192,11 +202,13 @@ int main(int argc, char* argv[]) {
                     ePressed = true;
                     SDL_SetCursor(SDL_GetDefaultCursor());
                     player.editMode = false;
+                    player.currentEditCursorSize = 1;
                 }
                 if(e.key.keysym.sym == SDLK_i && !guiM.guis[Index_INVENTORY].visible && !iPressed) {
                     printf("Inventory open.\n");
                     iPressed = true;
                     player.editMode = false;
+                    player.currentEditCursorSize = 1;
                     SDL_SetCursor(SDL_GetDefaultCursor());
                     guiM.guis[Index_INVENTORY].visible = true;
                 }
@@ -206,19 +218,28 @@ int main(int argc, char* argv[]) {
                     guiM.guis[Index_INVENTORY].visible  = false;
                 }
                 if(e.key.keysym.sym == SDLK_f && player.editMode && !fPressed) {
-                    switch(player.currentEditCursorSize) {
-                        case 1:
-                            player.currentEditCursorSize = 2;
-                        break;
-                        case 2:
-                            player.currentEditCursorSize = 3;
-                        break;
-                        case 3:
-                            player.currentEditCursorSize = 1;
-                        break;
-                        default:
-                            player.currentEditCursorSize = 1;
-                    }
+                        if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item != NULL) {
+                            switch(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->type) {
+                                case TOOL:
+                                    switch(player.currentEditCursorSize) {
+                                        case 1:
+                                            player.currentEditCursorSize = 2;
+                                        break;
+                                        case 2:
+                                            player.currentEditCursorSize = 3;
+                                        break;
+                                        case 3:
+                                            player.currentEditCursorSize = 1;
+                                        break;
+                                        default:
+                                            player.currentEditCursorSize = 1;
+                                    }
+                                break;
+                            }
+                        }
+                        else {
+                            printf("Nincs a kezedben item.");
+                        }
                     fPressed = true;
                 }
             }
@@ -235,20 +256,35 @@ int main(int argc, char* argv[]) {
             }
 
             if (e.type == SDL_MOUSEBUTTONDOWN && player.editMode) {
-                int mouseX, mouseY;
-                SDL_GetMouseState(&mouseX, &mouseY);
+                //NEM NULL AZ ITEM POINTER KULONBEN KICRASHEL A GECIBE
+                if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item != NULL) {
+                    if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->type == TOOL) {
+                        switch(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->name) {
+                            case HOE:
+                                int mouseX, mouseY;
+                                SDL_GetMouseState(&mouseX, &mouseY);
 
-                offsetX = mouseX + camera.x;
-                offsetY = mouseY + camera.y;
+                                offsetX = mouseX + camera.x;
+                                offsetY = mouseY + camera.y;
 
-                tileX = offsetX / TILE_SIZE;
-                tileY = offsetY / TILE_SIZE;
+                                tileX = offsetX / TILE_SIZE;
+                                tileY = offsetY / TILE_SIZE;
 
-                if (e.button.button == SDL_BUTTON_LEFT) {
-                    harrowTiles(&map, tileX, tileY, player.currentEditCursorSize);
+                                if (e.button.button == SDL_BUTTON_LEFT) {
+                                    harrowTiles(&map, tileX, tileY, player.currentEditCursorSize);
+                                }
+                                if (e.button.button == SDL_BUTTON_RIGHT) {
+                                    removeHarrowed(&map, tileX, tileY, player.currentEditCursorSize);
+                                }
+                            break;
+                        }
+                    }
+                    else if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->type == SEED) {
+
+                    }
                 }
-                if (e.button.button == SDL_BUTTON_RIGHT) {
-                    removeHarrowed(&map, tileX, tileY, player.currentEditCursorSize);
+                else {
+                    printf("Nincs item a kezedben.");
                 }
             }
         }

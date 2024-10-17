@@ -121,7 +121,6 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                 }
             }
             else if(guiManager->guis[i].type == QUICK_INVENTORY_CURSOR) {
-                printf("x: %f\n", (dest.x*1.00) + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE));
                 dest.x = (dest.x*1.00) + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE);
                 SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
             }
