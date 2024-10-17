@@ -185,7 +185,7 @@ int main(int argc, char* argv[]) {
                         player.currentQuickInventorySelection = 6;
                     break;
                     case SDLK_8:
-                        player.currentEditCursorSize = 1;wwas
+                        player.currentEditCursorSize = 1;
                         player.currentQuickInventorySelection = 7;
                     break;
                     default:

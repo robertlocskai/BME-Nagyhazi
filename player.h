@@ -29,11 +29,13 @@ typedef struct {
 
 } Item;
 
+#pragma pack(1)
 typedef struct {
     SDL_Rect slot;
     Item* item;
 
 } InventorySlot;
+#pragma pack()
 
 typedef struct {
     InventorySlot inventorySlots[4][8];
@@ -53,7 +55,11 @@ typedef struct {
     Inventory inv;
 } Player;
 
+Item* initItem(ItemName name);
 void initInventory(Inventory *inv);
+bool addItemToInventory(Inventory* inv, Item* item, int row, int col);
+void removeItemFromInventory(Inventory* inv, int row, int col);
+void initInventoryWithDefaultItems(Inventory* inv);
 void setDimensionsOfHotbar(Inventory *inv);
 void initPlayer(Player *player);
 void updatePlayer(Player *player);

@@ -99,7 +99,6 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                             itemSrc.y = player->inv.inventorySlots[i][j].item->srcY;
                             itemSrc.w = player->inv.inventorySlots[i][j].item->srcW;
                             itemSrc.h = player->inv.inventorySlots[i][j].item->srcH;
-
                             SDL_RenderCopy(renderer, itemSpriteSheet, &itemSrc, &player->inv.inventorySlots[i][j].slot);
 
                         }

@@ -32,68 +32,103 @@ void setDimensionsOfHotbar(Inventory *inv) {
 
 }
 
-void initInventory(Inventory *inv) {
-    /*ItemType type;
-    char[MAX_ITEM_NAME_LENGTH] name;
-    int srcX;
-    int srcY;
-    int srcW;
-    int srcH;
-    int qty;
-    int invX;
-    int invY;*/
+Item* initItem(ItemName name) {
 
-    for(int i = 0; i < 4; i++) {
-        for(int j = 0; j < 8; j++) {
-            int y = i*(ORIGINAL_TILE_SIZE*4) + 16;
-            int x = j*(ORIGINAL_TILE_SIZE*4) + 16;
-            inv->inventorySlots[i][j].slot = (SDL_Rect){x + SCALE, y + SCALE, ORIGINAL_TILE_SIZE*4 - SCALE*2, ORIGINAL_TILE_SIZE*4 - SCALE*2};
+    Item* item = (Item*)malloc(sizeof(Item));
+    if (item == NULL) {
+        return NULL;
+    }
+
+    if (name == HOE) {
+        item->type = TOOL;
+        item->name = HOE;
+        strcpy(item->displayName, "Hoe");
+        item->srcX = 0;
+        item->srcY = 0;
+        item->srcW = ORIGINAL_TILE_SIZE;
+        item->srcH = ORIGINAL_TILE_SIZE;
+        item->qty = 1;
+     }
+
+    printf("Created item at address: %p\n", (void*)item);
+    return item;
+
+}
+
+bool addItemToInventory(Inventory* inv, Item* item, int row, int col) {
+    if (inv == NULL || item == NULL || row < 0 || row >= 4 || col < 0 || col >= 8) {
+        return false;
+    }
+
+    if (inv->inventorySlots[row][col].item != NULL) {
+        return false;
+    }
+
+    inv->inventorySlots[row][col].item = item;
+    item->invX = col;
+    item->invY = row;
+    printf("Added to X: %d | Y: %d\n", row, col);
+    printf("%s\n", inv->inventorySlots[row][col].item->displayName);
+
+    return true;
+}
+
+void removeItemFromInventory(Inventory* inv, int row, int col) {
+    if (inv != NULL && row >= 0 && row < 4 && col >= 0 && col < 8) {
+        if (inv->inventorySlots[row][col].item != NULL) {
+            free(inv->inventorySlots[row][col].item);
+            inv->inventorySlots[row][col].item = NULL;
+        }
+    }
+}
+
+void initInventoryWithDefaultItems(Inventory* inv) {
+    Item* hoe1 = initItem(HOE);
+    if (hoe1 != NULL) {
+        if (!addItemToInventory(inv, hoe1, 3, 0)) {
+            free(hoe1);
+        }
+    }
+
+    Item* hoe2 = initItem(HOE);
+    if (hoe2 != NULL) {
+        if (!addItemToInventory(inv, hoe2, 3, 4)) {
+            free(hoe2);
+        }
+    }
+}
+
+void initInventory(Inventory *inv) {
+    memset(inv, 0, sizeof(Inventory));
+
+    printf("Inventory state memory clear utan:\n");
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 8; j++) {
+            printf("[%d]", inv->inventorySlots[i][j].item == NULL ? 0 : 1);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 8; j++) {
+            int y = i * (ORIGINAL_TILE_SIZE * 4) + 16;
+            int x = j * (ORIGINAL_TILE_SIZE * 4) + 16;
+            inv->inventorySlots[i][j].slot = (SDL_Rect){x + SCALE, y + SCALE, ORIGINAL_TILE_SIZE * 4 - SCALE * 2, ORIGINAL_TILE_SIZE * 4 - SCALE * 2};
             inv->inventorySlots[i][j].item = NULL;
         }
     }
 
-
-    for(int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         SDL_Rect rect;
         rect.w = ORIGINAL_TILE_SIZE * 4;
         rect.h = ORIGINAL_TILE_SIZE * 4;
-        rect.y = (SCREEN_HEIGHT-(ORIGINAL_TILE_SIZE*4) - ORIGINAL_TILE_SIZE);
-        rect.x = (SCREEN_WIDTH/2 - rect.w/2) - (rect.w/2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
+        rect.y = (SCREEN_HEIGHT - (ORIGINAL_TILE_SIZE * 4) - ORIGINAL_TILE_SIZE);
+        rect.x = (SCREEN_WIDTH / 2 - rect.w / 2) - (rect.w / 2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
         inv->quickInventorySlots[i].slot = rect;
         inv->quickInventorySlots[i].item = NULL;
     }
 
-    //DEFAULT ITEMEK ADDOLÁSA
-    inv->inventorySlots[3][0].item = (Item *)malloc(sizeof(Item));
-    if (inv->inventorySlots[3][0].item != NULL) {
-        inv->inventorySlots[3][0].item->type = TOOL;
-        inv->inventorySlots[3][0].item->name = HOE;
-        strcpy(inv->inventorySlots[3][0].item->displayName, "Hoe");
-        inv->inventorySlots[3][0].item->srcX = 0;
-        inv->inventorySlots[3][0].item->srcY = 0;
-        inv->inventorySlots[3][0].item->srcW = ORIGINAL_TILE_SIZE;
-        inv->inventorySlots[3][0].item->srcH = ORIGINAL_TILE_SIZE;
-        inv->inventorySlots[3][0].item->qty = 1;
-        inv->inventorySlots[3][0].item->invX = 3;
-        inv->inventorySlots[3][0].item->invY = 0;
-    }
-
-    inv->inventorySlots[3][4].item = (Item *)malloc(sizeof(Item));
-    if (inv->inventorySlots[3][4].item != NULL) {
-        inv->inventorySlots[3][4].item->type = TOOL;
-        inv->inventorySlots[3][4].item->name = HOE;
-        strcpy(inv->inventorySlots[3][4].item->displayName, "Hoe");
-        inv->inventorySlots[3][4].item->srcX = 0;
-        inv->inventorySlots[3][4].item->srcY = 0;
-        inv->inventorySlots[3][4].item->srcW = ORIGINAL_TILE_SIZE;
-        inv->inventorySlots[3][4].item->srcH = ORIGINAL_TILE_SIZE;
-        inv->inventorySlots[3][4].item->qty = 1;
-        inv->inventorySlots[3][4].item->invX = 3;
-        inv->inventorySlots[3][4].item->invY = 0;
-    }
-
-
-
+    initInventoryWithDefaultItems(inv);
 }
 
 void updatePlayer(Player *player) {

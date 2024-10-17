@@ -34,6 +34,8 @@ typedef struct {
 typedef struct {
     Tile tiles[MAP_ROWS][MAP_COLS];
 } Map;
+
+
 SDL_Rect TILE;
 
 bool isWithinBounds(int row, int col);
