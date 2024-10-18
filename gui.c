@@ -158,10 +158,10 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
 
     if(player->cursorHeldItem) {
         SDL_Rect cursorHeld;
-        cursorHeld.x = mouseX;
-        cursorHeld.y = mouseY;
-        cursorHeld.w = ORIGINAL_TILE_SIZE * 3;
-        cursorHeld.h = ORIGINAL_TILE_SIZE * 3;
+        cursorHeld.x = mouseX - (ORIGINAL_TILE_SIZE * 4.3)/2;
+        cursorHeld.y = mouseY - (ORIGINAL_TILE_SIZE * 4.3)/2;
+        cursorHeld.w = ORIGINAL_TILE_SIZE * 4.3;
+        cursorHeld.h = ORIGINAL_TILE_SIZE * 4.3;
 
         SDL_Rect itemSrc;
         itemSrc.x = player->cursorHeldItem->srcX;

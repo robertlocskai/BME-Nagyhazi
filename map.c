@@ -148,7 +148,7 @@ Plant* initPlant(ItemName name, int tileX, int tileY) {
     newPlant->tileY = tileY;
     newPlant->waterLevel = 100;
     newPlant->currentState = 1;
-    newPlant->states = 6;
+    newPlant->states = 5;
     newPlant->plantTimestamp = time(NULL);
     newPlant->grown = false;
 
@@ -252,6 +252,7 @@ void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Textu
                     }
 
                     dest.y -= 10;
+
                     cropSrc.x=map->plants[i][j]->srcX;
                     cropSrc.y=map->plants[i][j]->srcY;
                     cropSrc.w=map->plants[i][j]->srcW;
