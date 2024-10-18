@@ -365,9 +365,12 @@ int main(int argc, char* argv[]) {
             SDL_Delay(FRAME_DELAY - frameTime);
         }
     }
-
         //CLEANUP
         SDL_DestroyTexture(tileset);
+        SDL_DestroyTexture(cropTileset);
+        SDL_DestroyTexture(uiGrids);
+        SDL_DestroyTexture(gui);
+        SDL_DestroyTexture(items);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();
