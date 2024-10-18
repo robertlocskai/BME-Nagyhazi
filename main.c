@@ -269,30 +269,31 @@ int main(int argc, char* argv[]) {
             if (e.type == SDL_MOUSEBUTTONDOWN && player.editMode) {
                 //NEM NULL AZ ITEM POINTER KULONBEN KICRASHEL A GECIBE
                 if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item != NULL) {
-                    if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->type == TOOL) {
-                        switch(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->name) {
-                            case HOE:
-                                int mouseX, mouseY;
-                                SDL_GetMouseState(&mouseX, &mouseY);
+                        int mouseX, mouseY;
+                        SDL_GetMouseState(&mouseX, &mouseY);
 
-                                offsetX = mouseX + camera.x;
-                                offsetY = mouseY + camera.y;
+                        offsetX = mouseX + camera.x;
+                        offsetY = mouseY + camera.y;
 
-                                tileX = offsetX / TILE_SIZE;
-                                tileY = offsetY / TILE_SIZE;
-
-                                if (e.button.button == SDL_BUTTON_LEFT) {
-                                    harrowTiles(&map, tileX, tileY, player.currentEditCursorSize);
+                        tileX = offsetX / TILE_SIZE;
+                        tileY = offsetY / TILE_SIZE;
+                        switch(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->type) {
+                            case TOOL:
+                                if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->name == HOE) {
+                                    if (e.button.button == SDL_BUTTON_LEFT) {
+                                        harrowTiles(&map, tileX, tileY, player.currentEditCursorSize);
+                                    }
+                                    if (e.button.button == SDL_BUTTON_RIGHT) {
+                                        removeHarrowed(&map, tileX, tileY, player.currentEditCursorSize);
+                                    }
                                 }
-                                if (e.button.button == SDL_BUTTON_RIGHT) {
-                                    removeHarrowed(&map, tileX, tileY, player.currentEditCursorSize);
+                            break;
+                            case SEED:
+                                if (e.button.button == SDL_BUTTON_LEFT) {
+                                    removeItemFromInventory(&player.inv, 3, player.currentQuickInventorySelection);
                                 }
                             break;
                         }
-                    }
-                    else if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->type == SEED) {
-
-                    }
                 }
                 else {
                     printf("Nincs item a kezedben.");
