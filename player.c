@@ -2,6 +2,7 @@
 #include "dimensions.h"
 #include "player.h"
 #include <stdbool.h>
+#include "items.c"
 
 void initPlayer(Player *player) {
     player->speed = 5;
@@ -24,51 +25,6 @@ void setDimensionsOfHotbar(Inventory *inv) {
         inv->quickInventorySlots[i].slot.x = (SCREEN_WIDTH/2 - inv->quickInventorySlots[i].slot.w/2) - (inv->quickInventorySlots[i].slot.w/2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
         inv->quickInventorySlots[i].slot.y = (SCREEN_HEIGHT-(ORIGINAL_TILE_SIZE*4) - ORIGINAL_TILE_SIZE);
     }
-
-}
-
-Item* initItem(ItemName name) {
-
-    Item* item = (Item*)malloc(sizeof(Item));
-    if (item == NULL) {
-        return NULL;
-    }
-
-     switch(name) {
-        case HOE:
-            item->type = TOOL;
-            item->name = name;
-            strcpy(item->displayName, "Hoe");
-            item->srcX = 0;
-            item->srcY = 0;
-            item->srcW = ORIGINAL_TILE_SIZE;
-            item->srcH = ORIGINAL_TILE_SIZE;
-            item->qty = 1;
-        break;
-        case BARROT:
-            item->type = SEED;
-            item->name = name;
-            strcpy(item->displayName, "Barrot");
-            item->srcX = 0;
-            item->srcY = ORIGINAL_TILE_SIZE;
-            item->srcW = ORIGINAL_TILE_SIZE;
-            item->srcH = ORIGINAL_TILE_SIZE;
-            item->qty = 1;
-        break;
-        case NUMONG:
-            item->type = SEED;
-            item->name = name;
-            strcpy(item->displayName, "Numong");
-            item->srcX = ORIGINAL_TILE_SIZE*2;
-            item->srcY = ORIGINAL_TILE_SIZE;
-            item->srcW = ORIGINAL_TILE_SIZE;
-            item->srcH = ORIGINAL_TILE_SIZE;
-            item->qty = 1;
-        break;
-     }
-
-    printf("Created item at address: %p\n", (void*)item);
-    return item;
 
 }
 

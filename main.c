@@ -296,7 +296,7 @@ int main(int argc, char* argv[]) {
                         }
                 }
                 else {
-                    printf("Nincs item a kezedben.");
+                    printf("Nincs item a kezedben.\n");
                 }
             }
         }

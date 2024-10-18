@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1729242844 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
+1729243188 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
 	<SDL.h>
 	<stdio.h>
 	<stdbool.h>
@@ -416,15 +416,17 @@
 
 1728211388 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\dimensions.h
 
-1729241487 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.c
+1729256885 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.c
 	<SDL.h>
 	"dimensions.h"
 	"player.h"
 	<stdbool.h>
+	"items.c"
 
-1729240704 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.h
+1729256941 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.h
 	<SDL.h>
 	<stdbool.h>
+	"items.h"
 
 1704148573 c:\x86_64-w64-mingw32\include\sdl2\sdl_image.h
 	"SDL.h"
@@ -467,4 +469,9 @@
 	"player.h"
 	<SDL.h>
 	"gui.c"
+
+1729256947 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\items.h
+
+1729256912 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\items.c
+	"items.h"
 
