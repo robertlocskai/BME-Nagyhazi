@@ -216,6 +216,17 @@ int main(int argc, char* argv[]) {
                     printf("Inventory closed.\n");
                     iPressed = true;
                     guiM.guis[Index_INVENTORY].visible  = false;
+                    if(player.cursorHeldItem) {
+                        for(int i = 0; i < 4; i++) {
+                            for(int j = 0; j < 8; j++) {
+                                if(player.inv.inventorySlots[i][j].item==NULL) {
+                                    player.inv.inventorySlots[i][j].item = player.cursorHeldItem;
+                                    player.cursorHeldItem = NULL;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
                 if(e.key.keysym.sym == SDLK_f && player.editMode && !fPressed) {
                         if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item != NULL) {

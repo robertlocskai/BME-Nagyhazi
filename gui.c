@@ -111,20 +111,7 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                                     player->cursorHeldItem = helper;
                                 }
                             }
-                                /*if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem == NULL) {
-                                    player->cursorHeldItem = player->inv.inventorySlots[i][j].item;
-                                    player->inv.inventorySlots[i][j].item = NULL;
-                                }
-                                else if(player->inv.inventorySlots[i][j].item == NULL && player->cursorHeldItem != NULL) {
-                                    player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
-                                    player->cursorHeldItem = NULL;
-                                }
-                                else if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem != NULL) {
-                                    Item* helper = player->inv.inventorySlots[i][j].item;
-                                    player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
-                                    player->cursorHeldItem = helper;
-                                }
-                            */
+
                             mouseWasPressed = leftMousePressed;
 
                         }
