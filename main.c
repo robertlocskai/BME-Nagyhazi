@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
         Uint32 frameStart;
         int frameTime;
 
-        bool ePressed, iPressed, fPressed = false;
+        bool ePressed, tabPressed, fPressed = false;
 
         //MOUSE GRID INGAME GUI
         int offsetX;
@@ -206,17 +206,17 @@ int main(int argc, char* argv[]) {
                     player.editMode = false;
                     player.currentEditCursorSize = 1;
                 }
-                if(e.key.keysym.sym == SDLK_i && !guiM.guis[Index_INVENTORY].visible && !iPressed) {
+                if(e.key.keysym.sym == SDLK_TAB && !guiM.guis[Index_INVENTORY].visible && !tabPressed) {
                     printf("Inventory open.\n");
-                    iPressed = true;
+                    tabPressed = true;
                     player.editMode = false;
                     player.currentEditCursorSize = 1;
                     SDL_SetCursor(SDL_GetDefaultCursor());
                     guiM.guis[Index_INVENTORY].visible = true;
                 }
-                else if(e.key.keysym.sym == SDLK_i && guiM.guis[Index_INVENTORY].visible && !iPressed) {
+                else if(e.key.keysym.sym == SDLK_TAB && guiM.guis[Index_INVENTORY].visible && !tabPressed) {
                     printf("Inventory closed.\n");
-                    iPressed = true;
+                    tabPressed = true;
                     guiM.guis[Index_INVENTORY].visible  = false;
                     if(player.cursorHeldItem) {
                         for(int i = 0; i < 4; i++) {
@@ -260,8 +260,8 @@ int main(int argc, char* argv[]) {
                 if(e.key.keysym.sym == SDLK_e) {
                     ePressed = false;
                 }
-                if(e.key.keysym.sym == SDLK_i) {
-                    iPressed = false;
+                if(e.key.keysym.sym == SDLK_TAB) {
+                    tabPressed = false;
                 }
                 if(e.key.keysym.sym == SDLK_f) {
                     fPressed = false;
@@ -292,7 +292,10 @@ int main(int argc, char* argv[]) {
                             break;
                             case SEED:
                                 if (e.button.button == SDL_BUTTON_LEFT) {
-                                    if(plant(&map, tileX, tileY, &player.inv.inventorySlots[3][player.currentQuickInventorySelection])) {
+                                    if(player.inv.inventorySlots[3][player.currentQuickInventorySelection].item->name == NUMONG) {
+                                       printf("Trying to plant Numong...");
+                                    }
+                                    if(plant(&map, tileX, tileY, player.inv.inventorySlots[3][player.currentQuickInventorySelection].item)) {
                                         removeItemFromInventory(&player.inv, 3, player.currentQuickInventorySelection);
                                     }
                                 }

@@ -135,6 +135,44 @@ void removeHarrowed(Map *map, int tileX, int tileY, int currentEditCursorSize) {
     }
 }
 
+Plant* initPlant(ItemName name, int tileX, int tileY) {
+    Plant* newPlant = (Plant *)malloc(sizeof(Plant));
+    if (newPlant == NULL) {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    newPlant->srcW = ORIGINAL_TILE_SIZE;
+    newPlant->srcH = ORIGINAL_TILE_SIZE;
+    newPlant->tileX = tileX;
+    newPlant->tileY = tileY;
+    newPlant->waterLevel = 100;
+    newPlant->currentState = 1;
+    newPlant->states = 6;
+    newPlant->plantTimestamp = time(NULL);
+    newPlant->grown = false;
+
+    switch(name) {
+        case BARROT:
+            newPlant->name = name;
+            strcpy(newPlant->displayName, "Barrot");
+            newPlant->srcX = 0;
+            newPlant->srcY = 0;
+            newPlant->growthDuration = 120;
+        break;
+        case NUMONG:
+            newPlant->name = name;
+            strcpy(newPlant->displayName, "Numong");
+            newPlant->srcX = 0;
+            newPlant->srcY = ORIGINAL_TILE_SIZE*2;
+            newPlant->growthDuration = 60;
+        break;
+    }
+
+
+    return newPlant;
+}
+
 
 bool plant(Map *map, int tileX, int tileY, Item *item) {
     if(map->tiles[tileY][tileX].type==HARROWED ||
@@ -154,32 +192,14 @@ bool plant(Map *map, int tileX, int tileY, Item *item) {
        map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_RIGHT ||
        map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_RIGHT_BOTTOM
        ) {
-            Plant *newPlant = (Plant *)malloc(sizeof(Plant));
-        if (newPlant == NULL) {
-            printf("Memory allocation failed!\n");
-            return;
-        }
-
-            newPlant->currentState = 0;
-            newPlant->name = item->name;
-            strcpy(newPlant->displayName, "Barrot");
-            newPlant->srcX = 0;
-            newPlant->srcY = 0;
-            newPlant->srcW = ORIGINAL_TILE_SIZE;
-            newPlant->srcH = ORIGINAL_TILE_SIZE;
-            newPlant->tileX = tileX;
-            newPlant->tileY = tileY;
-            newPlant->waterLevel = 100;
-            newPlant->states = 6;
-            newPlant->plantTimestamp = time(NULL);
-            newPlant->growthDuration = 600;
-            map->plants[tileY][tileX] = newPlant;
+            map->plants[tileY][tileX] = initPlant(item->name, tileX, tileY);
+            return true;
        }
        else {
             printf("Csak felszantott foldre ultethetsz more.");
             return false;
        }
-    return true;
+    return false;
 }
 
 void getTilesetCoords(TileType type, int *x, int *y) {
@@ -219,6 +239,19 @@ void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Textu
 
                 if(map->plants[i][j] != NULL) {
                     SDL_Rect cropSrc;
+
+                    double time_diff = difftime(time(NULL), map->plants[i][j]->plantTimestamp);
+                    if(!map->plants[i][j]->grown) {
+                        if(time_diff>map->plants[i][j]->growthDuration/map->plants[i][j]->states*map->plants[i][j]->currentState) {
+                            map->plants[i][j]->currentState++;
+                            map->plants[i][j]->srcX = map->plants[i][j]->srcX + ORIGINAL_TILE_SIZE;
+                        }
+                        else if(time_diff>=map->plants[i][j]->growthDuration) {
+                            map->plants[i][j]->grown = true;
+                        }
+                    }
+
+                    dest.y -= 10;
                     cropSrc.x=map->plants[i][j]->srcX;
                     cropSrc.y=map->plants[i][j]->srcY;
                     cropSrc.w=map->plants[i][j]->srcW;

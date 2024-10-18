@@ -48,6 +48,7 @@ typedef struct {
     int waterLevel;
     time_t plantTimestamp;
     double growthDuration;
+    bool grown;
 } Plant;
 
 typedef struct {
