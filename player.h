@@ -12,7 +12,9 @@ typedef enum {
 } ItemType;
 
 typedef enum {
-    HOE
+    HOE,
+    BARROT,
+    NUMONG
 } ItemName;
 
 typedef struct {
