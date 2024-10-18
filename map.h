@@ -1,8 +1,11 @@
 #ifndef MAP_H
 #define MAP_H
+#include <time.h>
+#include "items.h"
 
 #define MAP_ROWS 50
 #define MAP_COLS 50
+#define MAX_PLANTS 50
 
 typedef enum {
     GRASS = 1,
@@ -32,7 +35,24 @@ typedef struct {
 } Tile;
 
 typedef struct {
+    int tileX;
+    int tileY;
+    ItemName name;
+    char displayName[MAX_ITEM_NAME_LENGTH];
+    int srcX;
+    int srcY;
+    int srcW;
+    int srcH;
+    int currentState;
+    int states;
+    int waterLevel;
+    time_t plantTimestamp;
+    double growthDuration;
+} Plant;
+
+typedef struct {
     Tile tiles[MAP_ROWS][MAP_COLS];
+    Plant* plants[MAP_ROWS][MAP_COLS];
 } Map;
 
 
@@ -43,10 +63,12 @@ bool isGrass(Tile tile);
 void updateTile(Map *map, int row, int col);
 void harrowTiles(Map *map, int tileX, int tileY, int currentEditCursorSize);
 void removeHarrowed(Map *map, int tileX, int tileY, int currentEditCursorSize);
+bool plant(Map *map, int tileX, int tileY, Item *item);
 void getTilesetCoords(TileType type, int *x, int *y);
+void freeMap(Map *map);
 
 void initMap(Map *map);
 void updateMap(Map *map);
-void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Rect *camera);
+void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Texture *cropTileset, SDL_Rect *camera);
 
 #endif

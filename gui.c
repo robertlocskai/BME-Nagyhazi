@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "dimensions.h"
+#include "items.h"
 
 void initGUI(Gui *gui, GUI_Type givenType) {
     switch(givenType) {
@@ -103,11 +104,15 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                                 }
                                 else if(player->inv.inventorySlots[i][j].item == NULL && player->cursorHeldItem != NULL) {
                                     player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
+                                    player->inv.inventorySlots[i][j].item->invX = j;
+                                    player->inv.inventorySlots[i][j].item->invY = i;
                                     player->cursorHeldItem = NULL;
                                 }
                                 else if(player->inv.inventorySlots[i][j].item != NULL && player->cursorHeldItem != NULL) {
                                     Item* helper = player->inv.inventorySlots[i][j].item;
                                     player->inv.inventorySlots[i][j].item = player->cursorHeldItem;
+                                    player->inv.inventorySlots[i][j].item->invX = j;
+                                    player->inv.inventorySlots[i][j].item->invY = i;
                                     player->cursorHeldItem = helper;
                                 }
                             }

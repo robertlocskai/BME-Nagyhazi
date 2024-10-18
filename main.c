@@ -102,6 +102,7 @@ int main(int argc, char* argv[]) {
 
 
         SDL_Texture* tileset = loadTexture("assets/images/tiles.png", renderer);
+        SDL_Texture* cropTileset = loadTexture("assets/images/crops.png", renderer);
         SDL_Texture* uiGrids = loadTexture("assets/images/gui/ingame_grid.png", renderer);
         SDL_Texture* gui = loadTexture("assets/images/gui/gui.png", renderer);
         SDL_Texture* items = loadTexture("assets/images/gui/items.png", renderer);
@@ -131,6 +132,7 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 freeInventory(&player);
+                freeMap(&map);
                 quit = 1;
             }
             else if (e.type == SDL_WINDOWEVENT) {
@@ -290,7 +292,9 @@ int main(int argc, char* argv[]) {
                             break;
                             case SEED:
                                 if (e.button.button == SDL_BUTTON_LEFT) {
-                                    removeItemFromInventory(&player.inv, 3, player.currentQuickInventorySelection);
+                                    if(plant(&map, tileX, tileY, &player.inv.inventorySlots[3][player.currentQuickInventorySelection])) {
+                                        removeItemFromInventory(&player.inv, 3, player.currentQuickInventorySelection);
+                                    }
                                 }
                             break;
                         }
@@ -334,7 +338,7 @@ int main(int argc, char* argv[]) {
 
         //RENDER
         //LAYER 0 MAP
-        renderMap(renderer, &map, tileset, &camera);
+        renderMap(renderer, &map, tileset, cropTileset, &camera);
         //LAYER 1 INGAME GUI
         if(player.editMode) {
             offsetX = mouseX + camera.x;

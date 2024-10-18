@@ -9,7 +9,8 @@ void initMap(Map *map) {
     for (int i = 0; i < MAP_ROWS; i++) {
         for (int j = 0; j < MAP_COLS; j++) {
             map->tiles[i][j].type = GRASS;
-            map->tiles[i][j].state = 0;  // Initialize state to 0 or any default value
+            map->tiles[i][j].state = 0;
+            map->plants[i][j] = NULL;
         }
     }
 }
@@ -134,12 +135,70 @@ void removeHarrowed(Map *map, int tileX, int tileY, int currentEditCursorSize) {
     }
 }
 
+
+bool plant(Map *map, int tileX, int tileY, Item *item) {
+    if(map->tiles[tileY][tileX].type==HARROWED ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_ALL ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_BOTTOM ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_BOTTOM_LEFT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_BOTTOM_RIGHT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_LEFT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_LEFT_BOTTOM_RIGHT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_LEFT_TOP_RIGHT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_RIGHT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_RIGHT_LEFT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_BOTTOM ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_LEFT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_LEFT_BOTTOM ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_RIGHT ||
+       map->tiles[tileY][tileX].type==HARROWED_EDGE_TOP_RIGHT_BOTTOM
+       ) {
+            Plant *newPlant = (Plant *)malloc(sizeof(Plant));
+        if (newPlant == NULL) {
+            printf("Memory allocation failed!\n");
+            return;
+        }
+
+            newPlant->currentState = 0;
+            newPlant->name = item->name;
+            strcpy(newPlant->displayName, "Barrot");
+            newPlant->srcX = 0;
+            newPlant->srcY = 0;
+            newPlant->srcW = ORIGINAL_TILE_SIZE;
+            newPlant->srcH = ORIGINAL_TILE_SIZE;
+            newPlant->tileX = tileX;
+            newPlant->tileY = tileY;
+            newPlant->waterLevel = 100;
+            newPlant->states = 6;
+            newPlant->plantTimestamp = time(NULL);
+            newPlant->growthDuration = 600;
+            map->plants[tileY][tileX] = newPlant;
+       }
+       else {
+            printf("Csak felszantott foldre ultethetsz more.");
+            return false;
+       }
+    return true;
+}
+
 void getTilesetCoords(TileType type, int *x, int *y) {
     *x = (type % TILESET_COLS) * ORIGINAL_TILE_SIZE;
     *y = (type / TILESET_COLS) * ORIGINAL_TILE_SIZE;
 }
 
-void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Rect *camera) {
+void freeMap(Map *map) {
+    for(int i = 0; i < MAP_COLS; i++) {
+        for(int j = 0; j < MAP_ROWS; j++) {
+            if(map->plants[i][j] != NULL) {
+                free(map->plants[i][j]);
+                map->plants[i][j] = NULL;
+            }
+        }
+    }
+}
+
+void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Texture *cropTileset, SDL_Rect *camera) {
     SDL_Rect src, dest;
     dest.w = TILE_SIZE;
     dest.h = TILE_SIZE;
@@ -157,6 +216,16 @@ void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Rect 
                 src.h = ORIGINAL_TILE_SIZE;
 
                 SDL_RenderCopy(renderer, tileset, &src, &dest);
+
+                if(map->plants[i][j] != NULL) {
+                    SDL_Rect cropSrc;
+                    cropSrc.x=map->plants[i][j]->srcX;
+                    cropSrc.y=map->plants[i][j]->srcY;
+                    cropSrc.w=map->plants[i][j]->srcW;
+                    cropSrc.h=map->plants[i][j]->srcH;
+
+                    SDL_RenderCopy(renderer, cropTileset, &cropSrc ,&dest);
+                }
             }
         }
     }
