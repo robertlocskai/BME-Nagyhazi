@@ -2,6 +2,7 @@
 #define MAP_H
 #include <time.h>
 #include "items.h"
+#include <stdbool.h>
 
 #define MAP_ROWS 50
 #define MAP_COLS 50
@@ -24,9 +25,12 @@ typedef enum {
     HARROWED_EDGE_TOP_RIGHT_BOTTOM = 13,
     HARROWED_EDGE_ALL = 14,
     HARROWED_EDGE_LEFT_TOP_RIGHT = 15,
-    HARROWED_EDGE_LEFT_BOTTOM_RIGHT = 16
+    HARROWED_EDGE_LEFT_BOTTOM_RIGHT = 16,
+    PLANKS = 17
 } TileType;
 
+
+const char* TILE_FORMAT_OUT = "(%d; %d)\n";
 typedef struct {
 
     TileType type;

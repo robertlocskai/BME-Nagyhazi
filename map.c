@@ -6,6 +6,7 @@
 
 
 void initMap(Map *map) {
+    printf("Initting map");
     for (int i = 0; i < MAP_ROWS; i++) {
         for (int j = 0; j < MAP_COLS; j++) {
             map->tiles[i][j].type = GRASS;
@@ -13,6 +14,47 @@ void initMap(Map *map) {
             map->plants[i][j] = NULL;
         }
     }
+}
+
+void saveMap(Map *map, const char* filename) {
+
+    FILE* file;
+    if(fopen_s(&file, filename, "w+") != 0 || file == NULL) {
+        printf("Error opening file on save.\n");
+        return;
+    }
+
+    for(int i = 0; i < MAP_ROWS; i++) {
+        for(int j = 0; j < MAP_COLS; j++) {
+            Tile tile = map->tiles[i][j];
+
+            fprintf_s(file, TILE_FORMAT_OUT, tile.type, tile.state);
+        }
+    }
+
+    fseek(file, 0, SEEK_SET);
+    fclose(file);
+}
+
+void loadMap(Map* map, const char* filename) {
+    initMap(map);
+    FILE* file;
+    if(fopen_s(&file, filename, "r") != 0 || file == NULL) {
+        printf("Error opening file.\n");
+        return;
+    }
+
+    for (int i = 0; i < MAP_ROWS; i++) {
+        for (int j = 0; j < MAP_COLS; j++) {
+            Tile* tile = &map->tiles[i][j];
+            if (fscanf_s(file, TILE_FORMAT_OUT, &tile->type, &tile->state) != 2) {
+                printf("Error reading tile at [%d][%d].\n", i, j);
+                fclose(file);
+                return;
+            }
+        }
+    }
+    fclose(file);
 }
 
 SDL_Rect TILE = { .h = TILE_SIZE, .w = TILE_SIZE, .x = 0, .y = 0 };
@@ -263,4 +305,8 @@ void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Textu
             }
         }
     }
+}
+
+void placePlank(Map* map, int tileX, int tileY) {
+    map->tiles[tileY][tileX].type = PLANKS;
 }

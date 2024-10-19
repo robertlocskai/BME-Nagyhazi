@@ -76,7 +76,8 @@ void updateCamera(SDL_Rect *camera, Player *player) {
 int main(int argc, char* argv[]) {
 
     Map map;
-    initMap(&map);
+    //initMap(&map);
+    loadMap(&map, "saves/defaultMap.dat");
 
     Player player;
     initPlayer(&player);
@@ -133,6 +134,7 @@ int main(int argc, char* argv[]) {
             if (e.type == SDL_QUIT) {
                 freeInventory(&player);
                 freeMap(&map);
+                saveMap(&map, "saves/debug.dat");
                 quit = 1;
             }
             else if (e.type == SDL_WINDOWEVENT) {
@@ -304,6 +306,7 @@ int main(int argc, char* argv[]) {
                 }
                 else {
                     printf("Nincs item a kezedben.\n");
+                            placePlank(&map, tileX, tileY);
                 }
             }
         }
