@@ -151,8 +151,6 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
                 dest.x = (dest.x*1.00) + player->currentQuickInventorySelection * (guiManager->guis[QUICK_INVENTORY_CURSOR].scale*ORIGINAL_TILE_SIZE);
                 SDL_RenderCopy(renderer, spriteSheet, &src, &dest);
             }
-
-
         }
     }
 
@@ -172,5 +170,21 @@ void drawGUI(SDL_Renderer *renderer, GUIManager *guiManager, SDL_Texture *sprite
 
         SDL_RenderCopy(renderer, itemSpriteSheet, &itemSrc, &cursorHeld);
 
+    }
+    if(player->inv.inventorySlots[3][player->currentQuickInventorySelection].item != NULL && player->editMode) {
+        SDL_Rect cursorPos;
+        cursorPos.x = mouseX;
+        cursorPos.y = mouseY - ORIGINAL_TILE_SIZE * 3;
+        cursorPos.w = ORIGINAL_TILE_SIZE * 3;
+        cursorPos.h = ORIGINAL_TILE_SIZE * 3;
+
+        SDL_Rect itemSrc;
+        itemSrc.x = player->inv.inventorySlots[3][player->currentQuickInventorySelection].item->srcX;
+        itemSrc.y = player->inv.inventorySlots[3][player->currentQuickInventorySelection].item->srcY;
+        itemSrc.w = player->inv.inventorySlots[3][player->currentQuickInventorySelection].item->srcW;
+        itemSrc.h = player->inv.inventorySlots[3][player->currentQuickInventorySelection].item->srcH;
+
+
+        SDL_RenderCopy(renderer, itemSpriteSheet, &itemSrc, &cursorPos);
     }
 }
