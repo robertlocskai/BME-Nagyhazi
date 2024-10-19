@@ -86,6 +86,9 @@ int main(int argc, char* argv[]) {
     GUIManager guiM;
     initGUIManager(&guiM);
 
+    //default house settings
+    SDL_Rect houseSrc = {0, 0, ORIGINAL_TILE_SIZE*6+10, ORIGINAL_TILE_SIZE*5+11};
+
 
     if(!init()) {
         printf("Couldn't init the game!");
@@ -97,6 +100,7 @@ int main(int argc, char* argv[]) {
         SDL_Texture* uiGrids = loadTexture("assets/images/gui/ingame_grid.png", renderer);
         SDL_Texture* gui = loadTexture("assets/images/gui/gui.png", renderer);
         SDL_Texture* items = loadTexture("assets/images/gui/items.png", renderer);
+        SDL_Texture* house = loadTexture("assets/images/house.png", renderer);
 
         if (tileset == NULL) {
             return -1;
@@ -344,6 +348,13 @@ int main(int argc, char* argv[]) {
         //LAYER PLAYER
         renderPlayer(renderer, &player, &camera);
 
+        //RENDER HOUSE
+        SDL_Rect houseDest;
+        houseDest.w = houseSrc.w*SCALE;
+        houseDest.h = houseSrc.h*SCALE;
+        houseDest.x = (TILE_SIZE * 17 + 11*SCALE) - camera.x;
+        houseDest.y = (TILE_SIZE * 17 + 7*SCALE) - camera.y;
+        SDL_RenderCopy(renderer, house, &houseSrc, &houseDest);
 
         //TOP LAYER GUI
         drawGUI(renderer, &guiM, gui, items, &player, mouseX, mouseY);
