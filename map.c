@@ -393,18 +393,18 @@ void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Textu
 
                     double time_diff = difftime(time(NULL), map->plants[i][j]->plantTimestamp);
                     if(!map->plants[i][j]->grown) {
-                        if(time_diff>map->plants[i][j]->growthDuration/map->plants[i][j]->states*map->plants[i][j]->currentState) {
-                            map->plants[i][j]->currentState++;
-                            map->plants[i][j]->srcX = map->plants[i][j]->srcX + ORIGINAL_TILE_SIZE;
-                        }
-                        else if(time_diff>=map->plants[i][j]->growthDuration) {
+                        if(time_diff>=map->plants[i][j]->growthDuration) {
+                            map->plants[i][j]->currentState = 5;
                             map->plants[i][j]->grown = true;
+                        }
+                        else if(time_diff>map->plants[i][j]->growthDuration/map->plants[i][j]->states*map->plants[i][j]->currentState) {
+                            map->plants[i][j]->currentState++;
                         }
                     }
 
                     dest.y -= 10;
 
-                    cropSrc.x=map->plants[i][j]->srcX;
+                    cropSrc.x=map->plants[i][j]->srcX + (map->plants[i][j]->currentState-1) * ORIGINAL_TILE_SIZE;
                     cropSrc.y=map->plants[i][j]->srcY;
                     cropSrc.w=map->plants[i][j]->srcW;
                     cropSrc.h=map->plants[i][j]->srcH;

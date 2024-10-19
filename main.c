@@ -92,16 +92,6 @@ int main(int argc, char* argv[]) {
     }
     else {
 
-        //EGÉR KURZOR BEÁLLÍTÁS
-        SDL_Surface *cursorSurface = IMG_Load("assets/images/gui/cursor.png");
-            if (!cursorSurface) {
-                printf("Failed to load cursor image: %s\n", IMG_GetError());
-            return -1;
-        }
-
-        SDL_Cursor *cursorShovel = SDL_CreateColorCursor(cursorSurface, 0, 0);
-
-
         SDL_Texture* tileset = loadTexture("assets/images/tiles.png", renderer);
         SDL_Texture* cropTileset = loadTexture("assets/images/crops.png", renderer);
         SDL_Texture* uiGrids = loadTexture("assets/images/gui/ingame_grid.png", renderer);
@@ -198,13 +188,11 @@ int main(int argc, char* argv[]) {
                 if(e.key.keysym.sym == SDLK_e && !player.editMode && !ePressed && !guiM.guis[Index_INVENTORY].visible) {
                     printf("Edit mode on.\n");
                     ePressed = true;
-                    SDL_SetCursor(cursorShovel);
                     player.editMode = true;
                 }
                 else if(e.key.keysym.sym == SDLK_e && player.editMode && !ePressed) {
                     printf("Edit mode off.\n");
                     ePressed = true;
-                    SDL_SetCursor(SDL_GetDefaultCursor());
                     player.editMode = false;
                     player.currentEditCursorSize = 1;
                 }
@@ -213,7 +201,6 @@ int main(int argc, char* argv[]) {
                     tabPressed = true;
                     player.editMode = false;
                     player.currentEditCursorSize = 1;
-                    SDL_SetCursor(SDL_GetDefaultCursor());
                     guiM.guis[Index_INVENTORY].visible = true;
                 }
                 else if(e.key.keysym.sym == SDLK_TAB && guiM.guis[Index_INVENTORY].visible && !tabPressed) {

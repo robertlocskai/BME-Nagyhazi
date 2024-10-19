@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1729338850 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
+1729348665 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
 	<SDL.h>
 	<stdio.h>
 	<stdbool.h>
@@ -405,7 +405,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1729342861 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
+1729348697 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
 	"map.h"
 	<stdlib.h>
 	<SDL.h>
