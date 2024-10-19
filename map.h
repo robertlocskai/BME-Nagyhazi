@@ -38,6 +38,8 @@ typedef struct {
 
 } Tile;
 
+const char* PLANT_FORMAT_OUT = "(%d; %d; %d; \"%s\"; %d; %d; %d; %d; %d; %d; %d; %lld; %.2f; %d)\n";
+const char* PLANT_FORMAT_IN = "(%d; %d; %d; \"%[^\"]\"; %d; %d; %d; %d; %d; %d; %d; %lld; %lf; %d)\n";
 typedef struct {
     int tileX;
     int tileY;

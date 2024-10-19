@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 
     Map map;
     //initMap(&map);
-    loadMap(&map, "saves/defaultMap.dat");
+    loadMap(&map, "saves/debugmap/");
 
     Player player;
     initPlayer(&player);
@@ -132,9 +132,9 @@ int main(int argc, char* argv[]) {
 
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
+                saveMap(&map, "saves/debugmap/");
                 freeInventory(&player);
                 freeMap(&map);
-                saveMap(&map, "saves/debug.dat");
                 quit = 1;
             }
             else if (e.type == SDL_WINDOWEVENT) {

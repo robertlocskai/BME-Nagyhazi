@@ -16,45 +16,154 @@ void initMap(Map *map) {
     }
 }
 
-void saveMap(Map *map, const char* filename) {
+void saveMap(Map *map, const char* folderPath) {
 
-    FILE* file;
-    if(fopen_s(&file, filename, "w+") != 0 || file == NULL) {
-        printf("Error opening file on save.\n");
+
+    for(int i = 0; i < MAP_ROWS; i++) {
+        for(int j = 0; j < MAP_COLS; j++) {
+            if(map->plants[i][j] != NULL) {
+                printf("[%d]", map->plants[i][j]->name);
+            }
+            else {
+                printf("[-]");
+            }
+        }
+        printf("\n");
+    }
+
+    char fullPath[100];
+    snprintf(fullPath, sizeof(fullPath), "%s/%s", folderPath, "tiles.dat");
+
+    FILE* tiles;
+    if(fopen_s(&tiles, fullPath, "w+") != 0 || tiles == NULL) {
+        printf("Error opening tiles on save.\n");
+        return;
+    }
+
+
+    snprintf(fullPath, sizeof(fullPath), "%s/%s", folderPath, "plants.dat");
+    FILE* plants;
+    if(fopen_s(&plants, fullPath, "w+") != 0 || plants == NULL) {
+        printf("Error opening plants on save.\n");
         return;
     }
 
     for(int i = 0; i < MAP_ROWS; i++) {
         for(int j = 0; j < MAP_COLS; j++) {
             Tile tile = map->tiles[i][j];
+            Plant* plant = map->plants[i][j];
+            //Print tiles
+            printf("Saving tile [%d][%d]: type=%d, state=%d\n", i, j, tile.type, tile.state);
+            fprintf_s(tiles, TILE_FORMAT_OUT, tile.type, tile.state);
+            //Print plants
+            if (plant != NULL) {
+                fprintf_s(plants, PLANT_FORMAT_OUT,
+                    plant->tileX,
+                    plant->tileY,
+                    plant->name,
+                    plant->displayName,
+                    plant->srcX,
+                    plant->srcY,
+                    plant->srcW,
+                    plant->srcH,
+                    plant->currentState,
+                    plant->states,
+                    plant->waterLevel,
+                    (long long)plant->plantTimestamp,
+                    plant->growthDuration,
+                    plant->grown);
+                    printf("\n-------------------------Saved a plant.-------------------------\n");
+            } else {
+                //Marker for no plant
+                fprintf_s(plants, "(%d; %d; -1; \"\"; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0)\n", i, j);
+            }
 
-            fprintf_s(file, TILE_FORMAT_OUT, tile.type, tile.state);
         }
     }
 
-    fseek(file, 0, SEEK_SET);
-    fclose(file);
+    fseek(tiles, 0, SEEK_SET);
+    fseek(plants, 0, SEEK_SET);
+    fclose(tiles);
+    fclose(plants);
 }
 
-void loadMap(Map* map, const char* filename) {
+void loadMap(Map* map, const char* folderPath) {
     initMap(map);
-    FILE* file;
-    if(fopen_s(&file, filename, "r") != 0 || file == NULL) {
-        printf("Error opening file.\n");
+
+    char fullPath[100];
+    snprintf(fullPath, sizeof(fullPath), "%s/%s", folderPath, "tiles.dat");
+
+    FILE* tiles;
+    if(fopen_s(&tiles, fullPath, "r") != 0 || tiles == NULL) {
+        printf("Error opening tiles.\n");
         return;
     }
+
+    snprintf(fullPath, sizeof(fullPath), "%s/%s", folderPath, "plants.dat");
+
+    FILE* plants;
+    if(fopen_s(&plants, fullPath, "r") != 0 || plants == NULL) {
+        printf("Error opening plants.\n");
+        return;
+    }
+
 
     for (int i = 0; i < MAP_ROWS; i++) {
         for (int j = 0; j < MAP_COLS; j++) {
             Tile* tile = &map->tiles[i][j];
-            if (fscanf_s(file, TILE_FORMAT_OUT, &tile->type, &tile->state) != 2) {
+            //READING TILES
+            if (fscanf_s(tiles, TILE_FORMAT_OUT, &tile->type, &tile->state) != 2) {
                 printf("Error reading tile at [%d][%d].\n", i, j);
-                fclose(file);
+                fclose(plants);
+                fclose(tiles);
                 return;
+            }
+
+            //READING PLANTS
+            Plant* plant = (Plant*)malloc(sizeof(Plant));
+            if (plant == NULL) {
+                printf("Memory allocation failed for plant at [%d][%d].\n", i, j);
+                fclose(tiles);
+                fclose(plants);
+                return;
+            }
+
+            int result = fscanf_s(plants, PLANT_FORMAT_IN,
+                &plant->tileX,
+                &plant->tileY,
+                &plant->name,
+                plant->displayName, (unsigned)sizeof(plant->displayName),
+                &plant->srcX,
+                &plant->srcY,
+                &plant->srcW,
+                &plant->srcH,
+                &plant->currentState,
+                &plant->states,
+                &plant->waterLevel,
+                (long long*)&plant->plantTimestamp,
+                &plant->growthDuration,
+                (int*)&plant->grown);
+
+            printf("\nResult: %d\n", result);
+
+            if (result == 14) {
+                    if(plant->name != -1) {
+                        map->plants[i][j] = plant;
+                    }
+                    else {
+                        free(plant);
+                        map->plants[i][j] = NULL;
+                    }
+            }
+            else {
+                free(plant);
+                map->plants[i][j] = NULL;
+                fscanf_s(plants, "%*[^\n]\n");
             }
         }
     }
-    fclose(file);
+    fclose(tiles);
+    fclose(plants);
 }
 
 SDL_Rect TILE = { .h = TILE_SIZE, .w = TILE_SIZE, .x = 0, .y = 0 };
