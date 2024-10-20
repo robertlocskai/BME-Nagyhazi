@@ -374,7 +374,17 @@ int main(int argc, char* argv[]) {
             buildingDest.h = buildingM.buildings[i].srcTopLayer.h*SCALE;
             buildingDest.x = (TILE_SIZE * 18 + buildingM.buildings[i].offsetX) - camera.x;
             buildingDest.y = (TILE_SIZE * 18 + buildingM.buildings[i].offsetY) - camera.y;
-            SDL_SetTextureAlphaMod(house, 255);
+
+            if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
+                buildingDest.y < player.rect.y - camera.y &&
+                buildingDest.x+5*SCALE <player.rect.x - camera.x &&
+                buildingDest.x+buildingDest.w-5*SCALE > player.rect.x + player.rect.w - camera.x
+               ) {
+                SDL_SetTextureAlphaMod(house, 70);
+            }
+            else {
+                SDL_SetTextureAlphaMod(house, 255);
+            }
             SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
         }
 
