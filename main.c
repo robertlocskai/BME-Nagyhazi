@@ -364,8 +364,6 @@ int main(int argc, char* argv[]) {
             SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcBottomLayer, &buildingDest);
         }
 
-        //LAYER PLAYER
-        renderPlayer(renderer, &player, &camera);
 
         //RENDER HOUSE TOP LAYER
         for(int i = 0; i < BUILDING_COUNT; i++) {
@@ -381,11 +379,28 @@ int main(int argc, char* argv[]) {
                 buildingDest.x+buildingDest.w-5*SCALE > player.rect.x + player.rect.w - camera.x
                ) {
                 SDL_SetTextureAlphaMod(house, 70);
+                //LAYER PLAYER
+                renderPlayer(renderer, &player, &camera);
+                SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+            }
+            else if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
+                buildingDest.y < player.rect.y - camera.y
+               ) {
+                //LAYER PLAYER
+                renderPlayer(renderer, &player, &camera);
+                SDL_SetTextureAlphaMod(house, 255);
+                SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
             }
             else {
                 SDL_SetTextureAlphaMod(house, 255);
+                SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+                //LAYER PLAYER
+                renderPlayer(renderer, &player, &camera);
             }
-            SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+
+            for(int j = 0; j < 5; j++) {
+                SDL_RenderDrawRect(renderer, &(SDL_Rect){buildingDest.x + buildingM.buildings[i].colliders[j].x, buildingDest.y + buildingM.buildings[i].colliders[j].y, buildingM.buildings[i].colliders[j].w, buildingM.buildings[i].colliders[j].h});
+            }
         }
 
         //TOP LAYER GUI
