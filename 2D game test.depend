@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1729512976 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
+1729513565 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
 	<SDL.h>
 	<stdio.h>
 	<stdbool.h>
@@ -480,7 +480,7 @@
 1729277051 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\items.c
 	"items.h"
 
-1729513028 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.c
+1729513611 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.c
 	"building.h"
 
 1729512395 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.h
