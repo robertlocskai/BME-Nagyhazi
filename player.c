@@ -63,13 +63,6 @@ void initInventoryWithDefaultItems(Inventory* inv) {
         }
     }
 
-    Item* hoe2 = initItem(HOE);
-    if (hoe2 != NULL) {
-        if (!addItemToInventory(inv, hoe2, 3, 4)) {
-            free(hoe2);
-        }
-    }
-
     Item* numong = initItem(NUMONG);
     if (numong != NULL) {
         if (!addItemToInventory(inv, numong, 0, 4)) {

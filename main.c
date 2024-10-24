@@ -8,6 +8,7 @@
 #include "tiles.c"
 #include "inGameUI.c"
 #include "gui.c"
+#include "building.c"
 
 const int FPS = 60;
 const int FRAME_DELAY = 1000 / FPS;
@@ -86,8 +87,13 @@ int main(int argc, char* argv[]) {
     GUIManager guiM;
     initGUIManager(&guiM);
 
-    //default house settings
-    SDL_Rect houseSrc = {0, 0, ORIGINAL_TILE_SIZE*6+10, ORIGINAL_TILE_SIZE*5+11};
+    //BUILDINGS
+    BuildingManager buildingM;
+    //INITTING BUILDING
+    Building house;
+    initBuilding(&house, HOUSE);
+    //ADD TO BUILDINGS
+    buildingM.buildings[0] = house;
 
 
     if(!init()) {
@@ -345,16 +351,57 @@ int main(int argc, char* argv[]) {
             tileY = offsetY / TILE_SIZE;
             renderTileHighlight(renderer, tileX, tileY, uiGrids, &camera, &player);
         }
-        //LAYER PLAYER
-        renderPlayer(renderer, &player, &camera);
 
-        //RENDER HOUSE
-        SDL_Rect houseDest;
-        houseDest.w = houseSrc.w*SCALE;
-        houseDest.h = houseSrc.h*SCALE;
-        houseDest.x = (TILE_SIZE * 17 + 11*SCALE) - camera.x;
-        houseDest.y = (TILE_SIZE * 17 + 7*SCALE) - camera.y;
-        SDL_RenderCopy(renderer, house, &houseSrc, &houseDest);
+
+        //RENDER HOUSE BOTTOM LAYER
+        for(int i = 0; i < BUILDING_COUNT; i++) {
+            SDL_Rect buildingDest;
+            buildingDest.w = buildingM.buildings[i].srcBottomLayer.w*SCALE;
+            buildingDest.h = buildingM.buildings[i].srcBottomLayer.h*SCALE;
+            buildingDest.x = (TILE_SIZE * 18 + buildingM.buildings[i].offsetX) + buildingM.buildings[i].bottomOffsetX - camera.x;
+            buildingDest.y = (TILE_SIZE * 18 + buildingM.buildings[i].offsetY) + buildingM.buildings[i].bottomOffsetY - camera.y;
+            SDL_SetTextureAlphaMod(house, 255);
+            SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcBottomLayer, &buildingDest);
+        }
+
+
+        //RENDER HOUSE TOP LAYER
+        for(int i = 0; i < BUILDING_COUNT; i++) {
+            SDL_Rect buildingDest;
+            buildingDest.w = buildingM.buildings[i].srcTopLayer.w*SCALE;
+            buildingDest.h = buildingM.buildings[i].srcTopLayer.h*SCALE;
+            buildingDest.x = (TILE_SIZE * 18 + buildingM.buildings[i].offsetX) - camera.x;
+            buildingDest.y = (TILE_SIZE * 18 + buildingM.buildings[i].offsetY) - camera.y;
+
+            if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
+                buildingDest.y < player.rect.y - camera.y &&
+                buildingDest.x+5*SCALE <player.rect.x - camera.x &&
+                buildingDest.x+buildingDest.w-5*SCALE > player.rect.x + player.rect.w - camera.x
+               ) {
+                SDL_SetTextureAlphaMod(house, 70);
+                //LAYER PLAYER
+                renderPlayer(renderer, &player, &camera);
+                SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+            }
+            else if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
+                buildingDest.y < player.rect.y - camera.y
+               ) {
+                //LAYER PLAYER
+                renderPlayer(renderer, &player, &camera);
+                SDL_SetTextureAlphaMod(house, 255);
+                SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+            }
+            else {
+                SDL_SetTextureAlphaMod(house, 255);
+                SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+                //LAYER PLAYER
+                renderPlayer(renderer, &player, &camera);
+            }
+
+            for(int j = 0; j < 5; j++) {
+                SDL_RenderDrawRect(renderer, &(SDL_Rect){buildingDest.x + buildingM.buildings[i].colliders[j].x, buildingDest.y + buildingM.buildings[i].colliders[j].y, buildingM.buildings[i].colliders[j].w, buildingM.buildings[i].colliders[j].h});
+            }
+        }
 
         //TOP LAYER GUI
         drawGUI(renderer, &guiM, gui, items, &player, mouseX, mouseY);
