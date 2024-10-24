@@ -39,7 +39,7 @@ void removeItemFromInventory(Inventory* inv, int row, int col);
 void initInventoryWithDefaultItems(Inventory* inv);
 void setDimensionsOfHotbar(Inventory *inv);
 void initPlayer(Player *player);
-void updatePlayer(Player *player);
+void updatePlayer(Player *player, Map* map);
 void renderPlayer(SDL_Renderer *renderer, Player *Player, SDL_Rect *camera);
 void freeInventory(Player *player);
 

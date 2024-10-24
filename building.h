@@ -20,6 +20,11 @@ typedef struct {
     int bottomOffsetX;
     int bottomOffsetY;
 
+    int posX;
+    int posY;
+
+    SDL_Rect buildingDest;
+
     int colliders[5];
 
 } Building;

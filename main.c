@@ -334,7 +334,7 @@ int main(int argc, char* argv[]) {
         SDL_GetMouseState(&mouseX, &mouseY);
 
         //UPDATES
-        updatePlayer(&player);
+        updatePlayer(&player, &map);
         updateCamera(&camera, &player);
         updateGUI(&guiM, mouseX, mouseY);
 
@@ -367,11 +367,9 @@ int main(int argc, char* argv[]) {
 
         //RENDER HOUSE TOP LAYER
         for(int i = 0; i < BUILDING_COUNT; i++) {
-            SDL_Rect buildingDest;
-            buildingDest.w = buildingM.buildings[i].srcTopLayer.w*SCALE;
-            buildingDest.h = buildingM.buildings[i].srcTopLayer.h*SCALE;
-            buildingDest.x = (TILE_SIZE * 18 + buildingM.buildings[i].offsetX) - camera.x;
-            buildingDest.y = (TILE_SIZE * 18 + buildingM.buildings[i].offsetY) - camera.y;
+            SDL_Rect buildingDest = buildingM.buildings[i].buildingDest;
+            buildingDest.x = buildingM.buildings[i].buildingDest.x - camera.x;
+            buildingDest.y = buildingM.buildings[i].buildingDest.y - camera.y;
 
             if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
                 buildingDest.y < player.rect.y - camera.y &&
@@ -399,7 +397,7 @@ int main(int argc, char* argv[]) {
             }
 
             for(int j = 0; j < map.colliders->size; j++) {
-                SDL_RenderDrawRect(renderer, &(SDL_Rect){buildingDest.x + ((SDL_Rect*)get(map.colliders, j))->x, buildingDest.y + ((SDL_Rect*)get(map.colliders, j))->y, ((SDL_Rect*)get(map.colliders, j))->w, ((SDL_Rect*)get(map.colliders, j))->h});
+                SDL_RenderDrawRect(renderer, &(SDL_Rect){((SDL_Rect*)get(map.colliders, j))->x - camera.x, ((SDL_Rect*)get(map.colliders, j))->y - camera.y, ((SDL_Rect*)get(map.colliders, j))->w, ((SDL_Rect*)get(map.colliders, j))->h});
             }
         }
 
