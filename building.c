@@ -19,19 +19,19 @@ void initBuilding(Building* building, BuildingName name, Map* map) {
             building->buildingDest = (SDL_Rect){building->posX + building->offsetX, building->posY+building->offsetY, building->srcTopLayer.w*SCALE, building->srcTopLayer.h*SCALE};
 
             //HATSO FAL
-            building->colliders[0] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*5, building->buildingDest.y+TILE_SIZE + 4*SCALE, TILE_SIZE*6, TILE_SIZE/3});
+            building->colliders[0] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*5, building->buildingDest.y+TILE_SIZE + 8*SCALE, TILE_SIZE*6, SCALE});
 
             //AJTO BAL
-            building->colliders[1] =  addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*5, building->buildingDest.y+5*TILE_SIZE + 9*SCALE, TILE_SIZE*3-2*SCALE, TILE_SIZE/3});
+            building->colliders[1] =  addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*5, building->buildingDest.y+5*TILE_SIZE + 9*SCALE, TILE_SIZE*3-5*SCALE, SCALE});
 
             //AJTO JOBB
-            building->colliders[2] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*7+TILE_SIZE*4, building->buildingDest.y+5*TILE_SIZE + 9*SCALE, TILE_SIZE*2, TILE_SIZE/3});
+            building->colliders[2] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*9+TILE_SIZE*4, building->buildingDest.y+5*TILE_SIZE + 9*SCALE, TILE_SIZE*2-4*SCALE, SCALE});
 
             //BAL
-            building->colliders[3] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*2, building->buildingDest.y+TILE_SIZE+9*SCALE, TILE_SIZE/4, TILE_SIZE*4});
+            building->colliders[3] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+SCALE*5, building->buildingDest.y+TILE_SIZE+9*SCALE, SCALE, TILE_SIZE*4});
 
             //JOBB
-            building->colliders[4] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+TILE_SIZE*6+4*SCALE, building->buildingDest.y+TILE_SIZE+9*SCALE, TILE_SIZE/4, TILE_SIZE*4});
+            building->colliders[4] = addToList(map->colliders, &(SDL_Rect){building->buildingDest.x+TILE_SIZE*6+4*SCALE, building->buildingDest.y+TILE_SIZE+9*SCALE, SCALE, TILE_SIZE*4});
 
 
         break;
