@@ -3,6 +3,7 @@
 #include <time.h>
 #include "items.h"
 #include <stdbool.h>
+#include "ArrayList.c"
 
 #define MAP_ROWS 50
 #define MAP_COLS 50
@@ -60,6 +61,7 @@ typedef struct {
 typedef struct {
     Tile tiles[MAP_ROWS][MAP_COLS];
     Plant* plants[MAP_ROWS][MAP_COLS];
+    ArrayList* colliders;
 } Map;
 
 

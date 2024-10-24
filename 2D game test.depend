@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1729513565 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
+1729762317 source:c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\main.c
 	<SDL.h>
 	<stdio.h>
 	<stdbool.h>
@@ -406,28 +406,29 @@
 	"begin_code.h"
 	"close_code.h"
 
-1729349222 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
+1729759454 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
 	"map.h"
 	<stdlib.h>
 	<SDL.h>
 	"dimensions.h"
 	<SDL_image.h>
 
-1729349222 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.h
+1729759017 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.h
 	<time.h>
 	"items.h"
 	<stdbool.h>
+	"ArrayList.c"
 
 1729463299 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\dimensions.h
 
-1729587187 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.c
+1729761495 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.c
 	<SDL.h>
 	"dimensions.h"
 	"player.h"
 	<stdbool.h>
 	"items.c"
 
-1729277051 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.h
+1729760568 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\player.h
 	<SDL.h>
 	<stdbool.h>
 	"items.h"
@@ -480,10 +481,16 @@
 1729277051 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\items.c
 	"items.h"
 
-1729513611 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.c
+1729763005 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.c
 	"building.h"
+	"map.h"
 
-1729512395 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.h
+1729761553 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.h
 	<SDL.h>
 	"dimensions.h"
+
+1729759536 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\arraylist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
 
