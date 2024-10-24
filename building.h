@@ -20,7 +20,7 @@ typedef struct {
     int bottomOffsetX;
     int bottomOffsetY;
 
-    SDL_Rect colliders[5];
+    int colliders[5];
 
 } Building;
 
@@ -30,5 +30,5 @@ typedef struct {
 
 } BuildingManager;
 
-void initBuilding(Building* building, BuildingName name);
+void initBuilding(Building* building, BuildingName name, Map* map);
 #endif

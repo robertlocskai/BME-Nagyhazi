@@ -406,17 +406,18 @@
 	"begin_code.h"
 	"close_code.h"
 
-1729349222 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
+1729758985 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.c
 	"map.h"
 	<stdlib.h>
 	<SDL.h>
 	"dimensions.h"
 	<SDL_image.h>
 
-1729349222 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.h
+1729759017 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\map.h
 	<time.h>
 	"items.h"
 	<stdbool.h>
+	"ArrayList.c"
 
 1729463299 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\dimensions.h
 
@@ -486,4 +487,8 @@
 1729512395 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\building.h
 	<SDL.h>
 	"dimensions.h"
+
+1729758796 c:\users\rober\documents\saját fontos\!tanulás\c\2d game test\arraylist.c
+	<stdio.h>
+	<stdlib.h>
 

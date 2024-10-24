@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
     BuildingManager buildingM;
     //INITTING BUILDING
     Building house;
-    initBuilding(&house, HOUSE);
+    initBuilding(&house, HOUSE, &map);
     //ADD TO BUILDINGS
     buildingM.buildings[0] = house;
 
@@ -398,8 +398,8 @@ int main(int argc, char* argv[]) {
                 renderPlayer(renderer, &player, &camera);
             }
 
-            for(int j = 0; j < 5; j++) {
-                SDL_RenderDrawRect(renderer, &(SDL_Rect){buildingDest.x + buildingM.buildings[i].colliders[j].x, buildingDest.y + buildingM.buildings[i].colliders[j].y, buildingM.buildings[i].colliders[j].w, buildingM.buildings[i].colliders[j].h});
+            for(int j = 0; j < map.colliders->size; j++) {
+                SDL_RenderDrawRect(renderer, &(SDL_Rect){buildingDest.x + ((SDL_Rect*)get(map.colliders, j))->x, buildingDest.y + ((SDL_Rect*)get(map.colliders, j))->y, ((SDL_Rect*)get(map.colliders, j))->w, ((SDL_Rect*)get(map.colliders, j))->h});
             }
         }
 

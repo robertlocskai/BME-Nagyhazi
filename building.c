@@ -1,6 +1,7 @@
 #include "building.h"
+#include "map.h"
 
-void initBuilding(Building* building, BuildingName name) {
+void initBuilding(Building* building, BuildingName name, Map* map) {
     switch(name) {
         case HOUSE:
             building->name = name;
@@ -13,19 +14,20 @@ void initBuilding(Building* building, BuildingName name) {
             building->bottomOffsetY = ORIGINAL_TILE_SIZE*5*SCALE + 8*SCALE;
 
             //HATSO FAL
-            building->colliders[0] = (SDL_Rect){SCALE*5, TILE_SIZE + 4*SCALE, TILE_SIZE*6, TILE_SIZE/3};
+            building->colliders[0] = addToList(map->colliders, &(SDL_Rect){SCALE*5, TILE_SIZE + 4*SCALE, TILE_SIZE*6, TILE_SIZE/3});
 
             //AJTO BAL
-            building->colliders[1] = (SDL_Rect){SCALE*5, 5*TILE_SIZE + 9*SCALE, TILE_SIZE*3-2*SCALE, TILE_SIZE/3};
+            building->colliders[1] =  addToList(map->colliders, &(SDL_Rect){SCALE*5, 5*TILE_SIZE + 9*SCALE, TILE_SIZE*3-2*SCALE, TILE_SIZE/3});
 
             //AJTO JOBB
-            building->colliders[2] = (SDL_Rect){SCALE*7+TILE_SIZE*4, 5*TILE_SIZE + 9*SCALE, TILE_SIZE*2, TILE_SIZE/3};
+            building->colliders[2] = addToList(map->colliders, &(SDL_Rect){SCALE*7+TILE_SIZE*4, 5*TILE_SIZE + 9*SCALE, TILE_SIZE*2, TILE_SIZE/3});
 
             //BAL
-            building->colliders[3] = (SDL_Rect){SCALE*2, TILE_SIZE+9*SCALE, TILE_SIZE/4, TILE_SIZE*4};
+            building->colliders[3] = addToList(map->colliders, &(SDL_Rect){SCALE*2, TILE_SIZE+9*SCALE, TILE_SIZE/4, TILE_SIZE*4});
 
             //JOBB
-            building->colliders[4] = (SDL_Rect){TILE_SIZE*6+4*SCALE, TILE_SIZE+9*SCALE, TILE_SIZE/4, TILE_SIZE*4};
+            building->colliders[4] = addToList(map->colliders, &(SDL_Rect){TILE_SIZE*6+4*SCALE, TILE_SIZE+9*SCALE, TILE_SIZE/4, TILE_SIZE*4});
+
 
         break;
     }
