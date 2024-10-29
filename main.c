@@ -365,11 +365,17 @@ int main(int argc, char* argv[]) {
         }
 
 
+        SDL_Rect* ajtoBal = get(map.colliders, buildingM.buildings[0].colliders[1]);
+        SDL_Rect* ajtoJobb = get(map.colliders, buildingM.buildings[0].colliders[2]);
+        SDL_Rect* bal = get(map.colliders, buildingM.buildings[0].colliders[3]);
+        SDL_Rect* jobb = get(map.colliders, buildingM.buildings[0].colliders[4]);
+
         //RENDER HOUSE TOP LAYER
         for(int i = 0; i < BUILDING_COUNT; i++) {
             SDL_Rect buildingDest = buildingM.buildings[i].buildingDest;
-            buildingDest.x = buildingM.buildings[i].buildingDest.x - camera.x;
-            buildingDest.y = buildingM.buildings[i].buildingDest.y - camera.y;
+            buildingDest.x = buildingM.buildings[0].buildingDest.x - camera.x;
+            buildingDest.y = buildingM.buildings[0].buildingDest.y - camera.y;
+
 
             if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
                 buildingDest.y < player.rect.y - camera.y &&
@@ -377,6 +383,10 @@ int main(int argc, char* argv[]) {
                 buildingDest.x+buildingDest.w-5*SCALE > player.rect.x + player.rect.w - camera.x
                ) {
                 SDL_SetTextureAlphaMod(house, 70);
+                ajtoBal->y = buildingM.buildings[0].buildingDest.y+5*TILE_SIZE + 9*SCALE;
+                ajtoJobb->y = buildingM.buildings[0].buildingDest.y+5*TILE_SIZE + 9*SCALE;
+                bal->h = TILE_SIZE*4;
+                jobb->h = TILE_SIZE*4;
                 //LAYER PLAYER
                 renderPlayer(renderer, &player, &camera);
                 SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
@@ -391,14 +401,18 @@ int main(int argc, char* argv[]) {
             }
             else {
                 SDL_SetTextureAlphaMod(house, 255);
+                ajtoBal->y = buildingM.buildings[i].buildingDest.y+4*TILE_SIZE + 10*SCALE;
+                ajtoJobb->y = buildingM.buildings[i].buildingDest.y+4*TILE_SIZE + 10*SCALE;
+                bal->h = TILE_SIZE*3;
+                jobb->h = TILE_SIZE*3;
                 SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
                 //LAYER PLAYER
                 renderPlayer(renderer, &player, &camera);
             }
 
-            for(int j = 0; j < map.colliders->size; j++) {
+            /*for(int j = 0; j < map.colliders->size; j++) {
                 SDL_RenderDrawRect(renderer, &(SDL_Rect){((SDL_Rect*)get(map.colliders, j))->x - camera.x, ((SDL_Rect*)get(map.colliders, j))->y - camera.y, ((SDL_Rect*)get(map.colliders, j))->w, ((SDL_Rect*)get(map.colliders, j))->h});
-            }
+            }*/
         }
 
         //TOP LAYER GUI
