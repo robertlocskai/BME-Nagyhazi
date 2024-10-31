@@ -100,6 +100,28 @@ int main(int argc, char* argv[]) {
     Scenes currentScene = Scene_MAIN_MENU;
 
 
+    //BUTTONS
+
+    SDL_Rect menuButtons[2];
+
+    //NEW GAME
+    SDL_Rect srcNewGame = (SDL_Rect){0, 0, 55, 19};
+    SDL_Rect destNewGame;
+    destNewGame.h = srcNewGame.h * SCALE;
+    destNewGame.w = srcNewGame.w * SCALE;
+    destNewGame.x = SCREEN_WIDTH/2 - srcNewGame.w*SCALE/2;
+    destNewGame.y = SCREEN_HEIGHT/2 - srcNewGame.h*SCALE/2;
+    menuButtons[0] = destNewGame;
+    //LOAD GAME
+    SDL_Rect srcLoadGame = (SDL_Rect){0, 19, 56, 19};
+    SDL_Rect destLoadGame;
+    destLoadGame.h = srcLoadGame.h * SCALE;
+    destLoadGame.w = srcLoadGame.w * SCALE;
+    destLoadGame.x = SCREEN_WIDTH/2 - srcLoadGame.w * SCALE / 2;
+    destLoadGame.y = SCREEN_HEIGHT/2 - srcLoadGame.y * SCALE / 2 + destLoadGame.h + SCALE*5;
+    menuButtons[1] = destLoadGame;
+
+
     if(!init()) {
         printf("Couldn't init the game!");
     }
@@ -112,6 +134,7 @@ int main(int argc, char* argv[]) {
         SDL_Texture* items = loadTexture("assets/images/gui/items.png", renderer);
         SDL_Texture* house = loadTexture("assets/images/house.png", renderer);
         SDL_Texture* logo = loadTexture("assets/images/gui/logo.png", renderer);
+        SDL_Texture* buttons = loadTexture("assets/images/gui/buttons.png", renderer);
 
         if (tileset == NULL) {
             return -1;
@@ -153,7 +176,31 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            if (e.type == SDL_MOUSEWHEEL) {
+            switch(currentScene) {
+                case(Scene_MAIN_MENU):
+                    int mouseX, mouseY;
+                    SDL_GetMouseState(&mouseX, &mouseY);
+                    if (e.type == SDL_MOUSEBUTTONDOWN) {
+                        for(int i = 0; i < sizeof(menuButtons)/sizeof(menuButtons[0]); i++) {
+                            if(mouseX >= menuButtons[i].x
+                            && mouseX <= menuButtons[i].x+menuButtons[i].w
+                            && mouseY >= menuButtons[i].y
+                            && mouseY <= menuButtons[i].y+menuButtons[i].h) {
+                                if(i==0) {
+                                    printf("New game.\n");
+                                    currentScene = Scene_INGAME;
+                                }
+                                else {
+                                    printf("Load game.\n");
+                                    currentScene = Scene_INGAME;
+                                }
+                            }
+                        }
+                    }
+                break;
+                case(Scene_INGAME):
+
+                if (e.type == SDL_MOUSEWHEEL) {
                 if (e.wheel.y > 0) {
                     player.currentQuickInventorySelection = player.currentQuickInventorySelection > 0 ? player.currentQuickInventorySelection-1 : 7;
                     player.currentEditCursorSize = 1;
@@ -311,6 +358,11 @@ int main(int argc, char* argv[]) {
                             placePlank(&map, tileX, tileY);
                 }
             }
+
+                break;
+            }
+
+
         }
 
 
@@ -348,8 +400,12 @@ int main(int argc, char* argv[]) {
                 logoDest.h = logoSrcDest.h * SCALE;
                 logoDest.x = SCREEN_WIDTH/2 - logoDest.w/2;
                 logoDest.y = SCREEN_HEIGHT/4 - logoDest.h/2;
-                printf("Logo dest: x: %d | y: %d | w: %d | h: %d ", logoSrcDest.x, logoSrcDest.y, logoSrcDest.w, logoSrcDest.h);
                 SDL_RenderCopy(renderer, logo, &logoSrcDest, &logoDest);
+
+                //GOMB
+                SDL_RenderCopy(renderer, buttons, &srcNewGame, &destNewGame);
+                SDL_RenderCopy(renderer, buttons, &srcLoadGame, &destLoadGame);
+
             break;
             case(Scene_INGAME):
 
@@ -458,6 +514,7 @@ int main(int argc, char* argv[]) {
         SDL_DestroyTexture(items);
         SDL_DestroyTexture(house);
         SDL_DestroyTexture(logo);
+        SDL_DestroyTexture(buttons);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();
