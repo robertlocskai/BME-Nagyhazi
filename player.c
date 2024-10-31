@@ -63,13 +63,6 @@ void initInventoryWithDefaultItems(Inventory* inv) {
         }
     }
 
-    Item* hoe2 = initItem(HOE);
-    if (hoe2 != NULL) {
-        if (!addItemToInventory(inv, hoe2, 3, 4)) {
-            free(hoe2);
-        }
-    }
-
     Item* numong = initItem(NUMONG);
     if (numong != NULL) {
         if (!addItemToInventory(inv, numong, 0, 4)) {
@@ -118,9 +111,28 @@ void initInventory(Inventory *inv) {
     initInventoryWithDefaultItems(inv);
 }
 
-void updatePlayer(Player *player) {
-    player->rect.x += player->xVelocity;
-    player->rect.y += player->yVelocity;
+bool checkCollisionWithWalls(SDL_Rect *playerRect, ArrayList *colliders) {
+    for (int i = 0; i < colliders->size; i++) {
+        SDL_Rect* wallCollider = (SDL_Rect*)get(colliders, i);
+        if (SDL_HasIntersection(playerRect, wallCollider)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void updatePlayer(Player *player, Map* map) {
+    SDL_Rect nextPosition = player->rect;
+    nextPosition.x += player->xVelocity;
+    nextPosition.y += player->yVelocity;
+
+    if (!checkCollisionWithWalls(&nextPosition, map->colliders)) {
+        player->rect.x += player->xVelocity;
+        player->rect.y += player->yVelocity;
+    }
+
+    player->xVelocity = 0;
+    player->yVelocity = 0;
 }
 
 void renderPlayer(SDL_Renderer *renderer, Player *player, SDL_Rect *camera) {

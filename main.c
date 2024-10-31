@@ -8,6 +8,8 @@
 #include "tiles.c"
 #include "inGameUI.c"
 #include "gui.c"
+#include "building.c"
+#include "scene.h"
 
 const int FPS = 60;
 const int FRAME_DELAY = 1000 / FPS;
@@ -86,8 +88,16 @@ int main(int argc, char* argv[]) {
     GUIManager guiM;
     initGUIManager(&guiM);
 
-    //default house settings
-    SDL_Rect houseSrc = {0, 0, ORIGINAL_TILE_SIZE*6+10, ORIGINAL_TILE_SIZE*5+11};
+    //BUILDINGS
+    BuildingManager buildingM;
+    //INITTING BUILDING
+    Building house;
+    initBuilding(&house, HOUSE, &map);
+    //ADD TO BUILDINGS
+    buildingM.buildings[0] = house;
+
+    //GAME SCENES
+    Scenes currentScene = Scene_MAIN_MENU;
 
 
     if(!init()) {
@@ -101,6 +111,7 @@ int main(int argc, char* argv[]) {
         SDL_Texture* gui = loadTexture("assets/images/gui/gui.png", renderer);
         SDL_Texture* items = loadTexture("assets/images/gui/items.png", renderer);
         SDL_Texture* house = loadTexture("assets/images/house.png", renderer);
+        SDL_Texture* logo = loadTexture("assets/images/gui/logo.png", renderer);
 
         if (tileset == NULL) {
             return -1;
@@ -327,37 +338,110 @@ int main(int argc, char* argv[]) {
         int mouseX, mouseY;
         SDL_GetMouseState(&mouseX, &mouseY);
 
-        //UPDATES
-        updatePlayer(&player);
-        updateCamera(&camera, &player);
-        updateGUI(&guiM, mouseX, mouseY);
+        switch(currentScene) {
+            case(Scene_MAIN_MENU):
+                SDL_SetRenderDrawColor(renderer, 154, 210, 227, 255);
+                SDL_RenderClear(renderer);
+                SDL_Rect logoSrcDest = (SDL_Rect){0, 0, 126, 84};
+                SDL_Rect logoDest;
+                logoDest.w = logoSrcDest.w * SCALE;
+                logoDest.h = logoSrcDest.h * SCALE;
+                logoDest.x = SCREEN_WIDTH/2 - logoDest.w/2;
+                logoDest.y = SCREEN_HEIGHT/4 - logoDest.h/2;
+                printf("Logo dest: x: %d | y: %d | w: %d | h: %d ", logoSrcDest.x, logoSrcDest.y, logoSrcDest.w, logoSrcDest.h);
+                SDL_RenderCopy(renderer, logo, &logoSrcDest, &logoDest);
+            break;
+            case(Scene_INGAME):
+
+                //UPDATES
+                updatePlayer(&player, &map);
+                updateCamera(&camera, &player);
+                updateGUI(&guiM, mouseX, mouseY);
 
 
-        //RENDER
-        //LAYER 0 MAP
-        renderMap(renderer, &map, tileset, cropTileset, &camera);
-        //LAYER 1 INGAME GUI
-        if(player.editMode) {
-            offsetX = mouseX + camera.x;
-            offsetY = mouseY + camera.y;
+                //RENDER
+                //LAYER 0 MAP
+                renderMap(renderer, &map, tileset, cropTileset, &camera);
+                //LAYER 1 INGAME GUI
+                if(player.editMode) {
+                    offsetX = mouseX + camera.x;
+                    offsetY = mouseY + camera.y;
 
-            tileX = offsetX / TILE_SIZE;
-            tileY = offsetY / TILE_SIZE;
-            renderTileHighlight(renderer, tileX, tileY, uiGrids, &camera, &player);
+                    tileX = offsetX / TILE_SIZE;
+                    tileY = offsetY / TILE_SIZE;
+                    renderTileHighlight(renderer, tileX, tileY, uiGrids, &camera, &player);
+                }
+
+
+                //RENDER HOUSE BOTTOM LAYER
+                for(int i = 0; i < BUILDING_COUNT; i++) {
+                    SDL_Rect buildingDest;
+                    buildingDest.w = buildingM.buildings[i].srcBottomLayer.w*SCALE;
+                    buildingDest.h = buildingM.buildings[i].srcBottomLayer.h*SCALE;
+                    buildingDest.x = (TILE_SIZE * 18 + buildingM.buildings[i].offsetX) + buildingM.buildings[i].bottomOffsetX - camera.x;
+                    buildingDest.y = (TILE_SIZE * 18 + buildingM.buildings[i].offsetY) + buildingM.buildings[i].bottomOffsetY - camera.y;
+                    SDL_SetTextureAlphaMod(house, 255);
+                    SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcBottomLayer, &buildingDest);
+                }
+
+
+                SDL_Rect* ajtoBal = get(map.colliders, buildingM.buildings[0].colliders[1]);
+                SDL_Rect* ajtoJobb = get(map.colliders, buildingM.buildings[0].colliders[2]);
+                SDL_Rect* bal = get(map.colliders, buildingM.buildings[0].colliders[3]);
+                SDL_Rect* jobb = get(map.colliders, buildingM.buildings[0].colliders[4]);
+
+                //RENDER HOUSE TOP LAYER
+                for(int i = 0; i < BUILDING_COUNT; i++) {
+                    SDL_Rect buildingDest = buildingM.buildings[i].buildingDest;
+                    buildingDest.x = buildingM.buildings[0].buildingDest.x - camera.x;
+                    buildingDest.y = buildingM.buildings[0].buildingDest.y - camera.y;
+
+
+                    if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
+                        buildingDest.y < player.rect.y - camera.y &&
+                        buildingDest.x+5*SCALE <player.rect.x - camera.x &&
+                        buildingDest.x+buildingDest.w-5*SCALE > player.rect.x + player.rect.w - camera.x
+                    ) {
+                        SDL_SetTextureAlphaMod(house, 70);
+                        ajtoBal->y = buildingM.buildings[0].buildingDest.y+5*TILE_SIZE + 9*SCALE;
+                        ajtoJobb->y = buildingM.buildings[0].buildingDest.y+5*TILE_SIZE + 9*SCALE;
+                        bal->h = TILE_SIZE*4;
+                        jobb->h = TILE_SIZE*4;
+                        //LAYER PLAYER
+                        renderPlayer(renderer, &player, &camera);
+                        SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+                    }
+                    else if(buildingDest.y+buildingDest.h > player.rect.y + player.rect.h - camera.y &&
+                        buildingDest.y < player.rect.y - camera.y
+                    ) {
+                        //LAYER PLAYER
+                        renderPlayer(renderer, &player, &camera);
+                        SDL_SetTextureAlphaMod(house, 255);
+                        SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+                    }
+                    else {
+                        SDL_SetTextureAlphaMod(house, 255);
+                        ajtoBal->y = buildingM.buildings[i].buildingDest.y+4*TILE_SIZE + 10*SCALE;
+                        ajtoJobb->y = buildingM.buildings[i].buildingDest.y+4*TILE_SIZE + 10*SCALE;
+                        bal->h = TILE_SIZE*3;
+                        jobb->h = TILE_SIZE*3;
+                        SDL_RenderCopy(renderer, house, &buildingM.buildings[i].srcTopLayer, &buildingDest);
+                        //LAYER PLAYER
+                        renderPlayer(renderer, &player, &camera);
+                    }
+
+                    /*for(int j = 0; j < map.colliders->size; j++) {
+                        SDL_RenderDrawRect(renderer, &(SDL_Rect){((SDL_Rect*)get(map.colliders, j))->x - camera.x, ((SDL_Rect*)get(map.colliders, j))->y - camera.y, ((SDL_Rect*)get(map.colliders, j))->w, ((SDL_Rect*)get(map.colliders, j))->h});
+                    }*/
+                }
+
+                //TOP LAYER GUI
+                drawGUI(renderer, &guiM, gui, items, &player, mouseX, mouseY);
+
+            break;
         }
-        //LAYER PLAYER
-        renderPlayer(renderer, &player, &camera);
 
-        //RENDER HOUSE
-        SDL_Rect houseDest;
-        houseDest.w = houseSrc.w*SCALE;
-        houseDest.h = houseSrc.h*SCALE;
-        houseDest.x = (TILE_SIZE * 17 + 11*SCALE) - camera.x;
-        houseDest.y = (TILE_SIZE * 17 + 7*SCALE) - camera.y;
-        SDL_RenderCopy(renderer, house, &houseSrc, &houseDest);
 
-        //TOP LAYER GUI
-        drawGUI(renderer, &guiM, gui, items, &player, mouseX, mouseY);
 
         SDL_RenderPresent(renderer);
 
@@ -372,6 +456,8 @@ int main(int argc, char* argv[]) {
         SDL_DestroyTexture(uiGrids);
         SDL_DestroyTexture(gui);
         SDL_DestroyTexture(items);
+        SDL_DestroyTexture(house);
+        SDL_DestroyTexture(logo);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();

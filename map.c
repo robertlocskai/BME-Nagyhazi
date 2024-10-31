@@ -14,6 +14,7 @@ void initMap(Map *map) {
             map->plants[i][j] = NULL;
         }
     }
+    map->colliders = createArray(sizeof(SDL_Rect));
 }
 
 void saveMap(Map *map, const char* folderPath) {
@@ -367,6 +368,7 @@ void freeMap(Map *map) {
             }
         }
     }
+    freeArray(map->colliders);
 }
 
 void renderMap(SDL_Renderer *renderer, Map *map, SDL_Texture *tileset, SDL_Texture *cropTileset, SDL_Rect *camera) {
