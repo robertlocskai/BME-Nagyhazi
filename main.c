@@ -458,7 +458,7 @@ int main(int argc, char* argv[]) {
                         buildingDest.x+5*SCALE <player.rect.x - camera.x &&
                         buildingDest.x+buildingDest.w-5*SCALE > player.rect.x + player.rect.w - camera.x
                     ) {
-                        SDL_SetTextureAlphaMod(house, 70);
+                        SDL_SetTextureAlphaMod(house, 40);
                         ajtoBal->y = buildingM.buildings[0].buildingDest.y+5*TILE_SIZE + 9*SCALE;
                         ajtoJobb->y = buildingM.buildings[0].buildingDest.y+5*TILE_SIZE + 9*SCALE;
                         bal->h = TILE_SIZE*4;
